@@ -225,8 +225,8 @@ re-trained encoder of an e2e checkpoint as a plain SPLADE (W discarded). SPLADE 
 
 Score `(1-λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)`. `11_eval_hybrid.py` runs in a single job:
 
-1. Exact search on the 1,000 validation queries for 21 values of λ (0, 0.05, …, 1) -> λ\* = the best MRR@10
-2. dev, DL19 and DL20 with λ\*, plus the checks λ = 0 (must reproduce SPLADE, 0.3828) and λ = 1 (must reproduce the
+1. Exact search on the 1,000 validation queries for 21 values of λ (0, 0.05, …, 1) → λ\* = the best MRR@10
+2. Dev, DL19 and DL20 with λ\*, plus the checks λ = 0 (must reproduce SPLADE, 0.3828) and λ = 1 (must reproduce the
    Concept Model alone)
 
 ```bash
