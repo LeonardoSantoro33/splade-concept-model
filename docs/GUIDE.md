@@ -296,12 +296,9 @@ The numbers are in the dictionaries at the top of the script; edit them there if
 - **Exact search instead of ANN**: every number is an upper bound for any approximate index, with no approximation error.
 - **Clean validation**: 1,000 training queries held out; checkpoints, hyper-parameters and λ are chosen on them
   (re-ranking SPLADE's top 100 during training, full-corpus search for λ), never on dev or BEIR.
-- **False negatives**: the other known positives of the same query are masked in the loss, and the top 3 mining
+- **False negatives**: the other known positives of the same query are masked out of the negatives in the loss, and the top 3 mining
   candidates are discarded (`--neg-rank-min 3`).
-- **SPLADE pooling**: `log(1 + ReLU(max_i logits_i))` instead of `max_i log(1 + ReLU(logits_i))`: identical (monotone
-  function), but it saves most of the activation memory in e2e training.
-- **Space**: sparse index ≈ 8 bytes per non-zero (int32 id + fp32 value) plus a per-document pointer; dense vectors 2k
-  bytes in fp16 (bf16 is the same size; int8 would halve it and was not tried).
+- **SPLADE pooling**: `log(1 + ReLU(max_i logits_i))` instead of `max_i log(1 + ReLU(logits_i))`. Same result, but less memory: log/ReLU run after the max.
 
 ---
 
