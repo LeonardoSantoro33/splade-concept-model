@@ -219,7 +219,7 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 Bold means p < 0.05 without correction. After a Bonferroni correction over the 3 datasets (0.05 / 3 ≈ 0.017), FiQA is no longer significant, while NFCorpus R@1000 still is. With a correction over all 9 tests neither is.
 Overall, we can say the hybrid is _at the level of SPLADE out of domain_, not clearly better.
 
-**Summary: the best configurations.**
+**Summary: the best configurations** (% of SPLADE)
 
 | System | MS MARCO dev MRR@10 | BEIR mean nDCG@10 | Indexes |
 |---|---|---|---|
