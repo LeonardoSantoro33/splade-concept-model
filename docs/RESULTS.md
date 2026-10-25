@@ -128,12 +128,7 @@ The difference between Frozen and Random W follows the same pattern in and out o
 
 A hybrid mixes SPLADE and the Concept Model in a single score: (1−λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d), where λ = 0 is SPLADE alone and λ = 1 is the Concept Model alone.
 
-λ\* is chosen on 1,000 validation queries with a full-corpus search over 21 values (0, 0.05, …, 1). The variants are:
-
-- **`hyb`**: the formula above, with g from the checkpoint (frozen or e2e); for the e2e checkpoints it needs the SPLADE index and the re-trained encoder's index;
-- **`hyb1`** (e2e only): the SPLADE term also comes from the re-trained encoder, so only one encoder index is needed;
-- **`hybnoW`** (e2e only): no W, SPLADE mixed with the re-trained encoder used as plain SPLADE;
-- **`ftsplade`** (e2e only): the re-trained encoder alone (λ = 0 of `hyb1`).
+λ\* is chosen on 1,000 validation queries with a full-corpus search over 21 values (0, 0.05, …, 1).
 
 Variants of the hybrid, from the original one to the re-trained encoder alone. `SPLADE_θ` is the encoder re-trained end-to-end (e2e checkpoints), and `g(x) = W·SPLADE_θ(x)`.
 
@@ -142,7 +137,7 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | `hyb` | `(1−λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)` | • Index of the original SPLADE<br>• Sparse vectors of the re-trained encoder θ (needed for the term with W) | The original hybrid. |
 | `hyb1` | `(1−λ)·SPLADE_θ(q)·SPLADE_θ(d) + λ·g(q)·g(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | The original SPLADE is no longer used: it is replaced by `SPLADE_θ`, the re-trained encoder. |
 | `hybnoW` | `(1−λ)·SPLADE(q)·SPLADE(d) + λ·SPLADE_θ(q)·SPLADE_θ(d)` | • Index of the original SPLADE<br>• Sparse vectors of the re-trained encoder θ | The second term does not use `g` (that is, `W·SPLADE_θ`) but `SPLADE_θ` directly, without W. |
-| `ftsplade`      (ft = fine-tuned SPLADE) | `SPLADE_θ(q)·SPLADE_θ(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | Same as `hyb1` with λ = 0: the re-trained e2e encoder used directly as a plain SPLADE. |
+| `ftsplade` (ft = fine-tuned SPLADE) | `SPLADE_θ(q)·SPLADE_θ(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | Same as `hyb1` with λ = 0: the re-trained e2e encoder used directly as a plain SPLADE. |
 
 **dev MRR@10 and BEIR mean nDCG@10 (λ\* in brackets)**
 
