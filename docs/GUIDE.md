@@ -31,7 +31,7 @@ pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt   # or requirements_env.txt for the exact environment
 ```
 
-**Data directories.** Both paths are read from environment variables (defaults in `config.py`); put them in
+**Data directories.** Both paths are read from environment variables (defaults in `config.py`). Put them in
 `~/.bashrc` so they are always set:
 
 - `FM_DIR`: pre-encoded SPLADE vectors of MS MARCO in Seismic format (`documents.bin`, `queries.bin`, `doc_ids.npy`,
@@ -62,7 +62,7 @@ Do not `cat` the large result `.json` files on a cluster terminal; `grep` the lo
 
 **Naming of results.** Every evaluation writes `results/<run>_<set>.json` with per-query metrics, for example
 `..._best_dev.json`, `..._best_beir_fiqa.json`, `splade_baseline_dev.json`, `hyb_e2e_k256_..._best_lam0.20_dev.json`.
-Hybrid validation curves are in `*_validation.json`; significance tests in `results/significance/` and
+Hybrid validation curves are in `*_validation.json`. Significance tests in `results/significance/` and
 `results/significance.csv`.
 
 ---
@@ -85,8 +85,7 @@ sbatch -J prep jobs/cpu.sbatch 01_prepare_data.py
 ```
 
 Converts the token ids of the provided vectors (28,679-entry mapping) into the BERT space (30,522) and caches the
-8.84M documents and the 6,980 dev queries. Check in the log: the document and query counts, and
-`dot-product check: groundtruth=X recomputed=X` (the two numbers must match).
+8.84M documents and the 6,980 dev queries.
 
 ### 1.3 Download MS MARCO and TREC DL (~10 min, network, login node is fine)
 
