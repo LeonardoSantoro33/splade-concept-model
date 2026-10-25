@@ -20,7 +20,19 @@ Chosen on validation (1,000 held-out training queries, SPLADE = 0.3639), never o
 | 4096 | `frozen_k4096_r2_is0156_lr3e5_ep5` | 0.0156 | 3e-5 | 5 | 0.3566 |
 | 8192 | `frozen_k8192_r2_is0110_lr3e5_ep5` | 0.0110 | 3e-5 | 5 | 0.3692 |
 
+**Random W** (not trained: W is left at its initialisation, init-std = 1/√k)
+
+| k | run (`models/<run>/best`) | init-std | lr | epochs | best val |
+|---|---|---|---|---|---|
+| 256 | `frozen_k256_rand` | 0.0625 | 1e-9 | 1 step | 0.2384 |
+| 512 | `frozen_k512_rand` | 0.0442 | 1e-9 | 1 step | 0.3043 |
+| 1024 | `frozen_k1024_rand` | 0.03125 | 1e-9 | 1 step | 0.3380 |
+| 2048 | `frozen_k2048_rand` | 0.0221 | 1e-9 | 1 step | 0.3421 |
+| 4096 | `frozen_k4096_rand` | 0.0156 | 1e-9 | 1 step | 0.3532 |
+| 8192 | `frozen_k8192_rand` | 0.0110 | 1e-9 | 1 step | 0.3614 |
+
 Random W (not trained): `frozen_k<k>_rand`, init-std 1/√k; validation 0.2384 / 0.3043 / 0.3380 / 0.3421 / 0.3532 / 0.3614.
+
 
 **e2e** (W and BERT trained, batch size 32, 1 epoch)
 
