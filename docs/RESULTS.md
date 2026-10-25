@@ -59,7 +59,7 @@ DL20 nDCG@10 0.7203, R@1000 0.8989.
 | 4096 | 8,192 | 0.3691 (96.4%) | 0.3717 (97.1%) | **0.3829 (100.0%)** |
 | 8192 | 16,384 | 0.3761 (98.2%) | 0.3766 (98.4%) | 0.3722 (97.2%) |
 
-e2e with fixed W, k = 1024: 0.3714 (97.0%). About 94% of the e2e gain over the random W at k = 1024 is obtained with BERT alone.
+e2e with fixed W, k = 1024: 0.3714 (97.0%).
 
 **e2e, full official evaluation**
 
