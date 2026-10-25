@@ -126,7 +126,7 @@ for training.
 
 ## 2. Frozen variant (only W is trained)
 
-Round 1 uses in-batch negatives only, round 2 adds 7 hard negatives per query (ranks 4–100 of SPLADE; the top 3
+Round 1 uses in-batch negatives only, round 2 adds 7 hard negatives per query (ranks 4–100 of SPLADE, the top 3
 are discarded as possible false negatives):
 
 ```bash
@@ -139,11 +139,11 @@ sbatch -J cm_r2_k1024_lr3e5 jobs/gpu.sbatch 06_train_concept_model.py --mode fro
 
 What we learned while tuning (validation MRR@10, 1,000 queries, SPLADE = 0.3639):
 
-- in-batch negatives only (round 1) ends *below* a random W for k ≥ 512; hard negatives help at every k;
-- the original learning rate (1e-3) was too high and destroyed the random projection: lowering it was the main fix;
+- In-batch negatives only (round 1) ends *below* a random W for k ≥ 512. Hard negatives help at every k.
+- The original learning rate (1e-3) was too high and destroyed the random projection: lowering it was the main fix.
 - `--init-std = 1/√k` fixes the initial score scale (loss at step 0 at k = 256: 6.08 → 1.86) and was used for k ≥ 512
-  (k = 256 and 1024 kept the best older recipe);
-- discarding more candidates (`--neg-rank-min 20`) and lowering the temperature (0.1, 0.05) did **not** help;
+  (k = 256 and 1024 kept the best older recipe).
+- Discarding more candidates (`--neg-rank-min 20`) and lowering the temperature (0.1 or 0.05) did **not** help. So we left `--neg-rank-min 3` (set explicitly in every command, since the script default is actually 0) and `--temperature 1.0` (the default).
 - for k = 2048, 4096, 8192: `--init-std 0.0221 / 0.0156 / 0.0110 --lr 3e-5 --epochs 5 --val-every 250`.
 
 The **random-W baseline** is the same architecture with W left at its initialisation (`init-std = 1/√k`), obtained by
