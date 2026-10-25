@@ -135,7 +135,7 @@ export FM_DIR=/path/to/seismic/encoded/msmarco      # read-only input
 export WORK_DIR=/path/to/large/scratch/splade_concept   # caches, checkpoints, results (several hundred GB for all experiments)
 ```
 
-Every long step is a Slurm job; the complete sequence, with the exact commands, is in [`docs/GUIDE.md`](docs/GUIDE.md).
+Every long step is a Slurm job. The complete sequence, with the exact commands, is in [`docs/GUIDE.md`](docs/GUIDE.md).
 The figures are produced with `python plots/concept_model_plots.py` (numbers are written inside the script).
 
 ## Reproducibility
