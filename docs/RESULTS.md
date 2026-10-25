@@ -142,7 +142,7 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | `hyb` | `(1−λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)` | • Index of the original SPLADE<br>• Sparse vectors of the re-trained encoder θ (needed for the term with W) | The original hybrid. |
 | `hyb1` | `(1−λ)·SPLADE_θ(q)·SPLADE_θ(d) + λ·g(q)·g(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | The original SPLADE is no longer used: it is replaced by `SPLADE_θ`, the re-trained encoder. |
 | `hybnoW` | `(1−λ)·SPLADE(q)·SPLADE(d) + λ·SPLADE_θ(q)·SPLADE_θ(d)` | • Index of the original SPLADE<br>• Sparse vectors of the re-trained encoder θ | The second term does not use `g` (that is, `W·SPLADE_θ`) but `SPLADE_θ` directly, without W. |
-| `ftsplade` (ft = fine-tuned SPLADE) | `SPLADE_θ(q)·SPLADE_θ(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | Same as `hyb1` with λ = 0: the re-trained e2e encoder used directly as a plain SPLADE. |
+| `ftsplade`      (ft = fine-tuned SPLADE) | `SPLADE_θ(q)·SPLADE_θ(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | Same as `hyb1` with λ = 0: the re-trained e2e encoder used directly as a plain SPLADE. |
 
 **dev MRR@10 and BEIR mean nDCG@10 (λ\* in brackets)**
 
