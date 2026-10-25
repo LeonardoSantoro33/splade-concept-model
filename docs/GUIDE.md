@@ -4,6 +4,8 @@ This guide lists, in execution order, the commands used to produce the results i
 (ISTI-CNR, A100 40 GB nodes, partition `long`). All commands are run from the repository directory. Result tables
 are in [`RESULTS.md`](RESULTS.md); the exact hyper-parameters of the final checkpoints are in its first section.
 
+> Raw logs and per-query results (`logs/`, `training_logs/`, `results/`) are not in the repository: see [Reproducibility](../README.md#reproducibility) in the README.
+
 | Stage | What it does | Script |
 |---|---|---|
 | Baseline | SPLADE with exact search over all of MS MARCO | `04_baseline_splade.py` |
