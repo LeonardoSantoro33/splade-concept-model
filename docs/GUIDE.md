@@ -271,10 +271,9 @@ It reads the per-query metrics saved in `results/` (no search, no GPU, a few sec
 R@1000, prints the mean of each system, the difference B − A, a 95% bootstrap confidence interval (10,000
 resamples) and p-values from a paired t-test and a paired permutation test (10,000 sign flips). Conventions:
 
-- **A is the reference, B the system under test**, so B − A > 0 means B is better; we report the permutation p;
-- the closing line "p < 0.05 -> significant" is always printed; ignore it and read the p-value;
-- we test only where an improvement is claimed; on BEIR each dataset is tested separately and the number of tests
-  is accounted for with a Bonferroni correction (0.05 / m).
+- **A is the reference, B the system under test**, so B − A > 0 means B is better
+- We call a difference **significant** only if the two-sided permutation p-value is below 0.05 and the 95% bootstrap confidence interval of B − A does not contain zero
+- We test only where an improvement is claimed
 
 For BEIR, A and B are `splade_baseline_beir_beir_<dataset>` and `<run>_beir_<dataset>`.
 
