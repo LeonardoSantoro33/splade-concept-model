@@ -93,42 +93,41 @@ so they are deliberately not moved into a package.
 
 ```
 .
-├── 00_smoke_test.py            # unit tests + full pipeline on synthetic data (CPU, ~5 min)
-├── 01_prepare_data.py          # read the provided Seismic .bin files, map token ids to the BERT vocab, cache as CSR
-├── 02_download_msmarco.py      # MS MARCO queries / qrels / passages (+ TREC DL 2019/2020)
-├── 03_check_encoder.py         # which SPLADE checkpoint reproduces the provided vectors
-├── 04_baseline_splade.py       # SPLADE baseline, exact search, check vs. the provided ground truth
-├── 05_encode_train_queries.py  # SPLADE vectors of the MS MARCO training queries
-├── 06_train_concept_model.py   # training: --mode frozen | e2e, InfoNCE, hard negatives
-├── 07_mine_negatives.py        # hard-negative mining (SPLADE or a trained model)
-├── 08_eval_concept_model.py    # official evaluation (dense search), concept analysis, interventions
-├── 08b_eval_streaming.py       # same, streaming exact search for frozen models with k >= 2048 (does not fit in 40 GB)
-├── 08c_eval_e2e_streaming.py   # same for e2e models; re-encodes the corpus and saves the sparse shards used by 11
-├── 09_lce_splade.py            # legacy: Latent Concept Expansion baseline from the earlier SPLARE project
-├── 10_eval_beir.py             # zero-shot BEIR (--splade, --ckpts, --ft-splade, --hybrid)
-├── 11_eval_hybrid.py           # hybrids: λ chosen on validation, then dev / DL19 / DL20 (--variant two|single|now)
-├── 12_significance.py          # paired per-query tests: bootstrap CI + t-test + permutation test
+├── 00_smoke_test.py                # unit tests + full pipeline on synthetic data (CPU, ~5 min)
+├── 01_prepare_data.py              # read the provided Seismic .bin files, map token ids to the BERT vocab, cache as CSR
+├── 02_download_msmarco.py          # MS MARCO queries / qrels / passages (+ TREC DL 2019/2020)
+├── 03_check_encoder.py             # which SPLADE checkpoint reproduces the provided vectors
+├── 04_baseline_splade.py           # SPLADE baseline, exact search, check vs. the provided ground truth
+├── 05_encode_train_queries.py      # SPLADE vectors of the MS MARCO training queries
+├── 06_train_concept_model.py       # training: --mode frozen | e2e, InfoNCE, hard negatives
+├── 07_mine_negatives.py            # hard-negative mining (SPLADE or a trained model)
+├── 08_eval_concept_model.py        # official evaluation (dense search), concept analysis, interventions
+├── 08b_eval_streaming.py           # same, streaming exact search for frozen models with k >= 2048 (does not fit in 40 GB)
+├── 08c_eval_e2e_streaming.py       # same for e2e models; re-encodes the corpus and saves the sparse shards used by 11
+├── 09_lce_splade.py                # legacy: Latent Concept Expansion baseline from the earlier SPLARE project
+├── 10_eval_beir.py                 # zero-shot BEIR (--splade, --ckpts, --ft-splade, --hybrid)
+├── 11_eval_hybrid.py               # hybrids: λ chosen on validation, then dev / DL19 / DL20 (--variant two|single|now)
+├── 12_significance.py              # paired per-query tests: bootstrap CI + t-test + permutation test
 │
-├── config.py                   # paths (env vars FM_DIR, WORK_DIR)
-├── sparse_io.py  retrieval.py  # CSR / Seismic I/O; exact GPU search
-├── splade_encoder.py           # SPLADE encoder (memory-efficient pooling)
-├── concept_model.py            # W, InfoNCE, false-negative mask, checkpoints
+├── config.py                       # paths (env vars FM_DIR, WORK_DIR)
+├── sparse_io.py  retrieval.py      # CSR / Seismic I/O; exact GPU search
+├── splade_encoder.py               # SPLADE encoder (memory-efficient pooling)
+├── concept_model.py                # W, InfoNCE, false-negative mask, checkpoints
 ├── metrics.py  msmarco.py  pipeline.py  utils.py
-├── lce.py                      # used by the smoke test and by 09 (LCE of the earlier project)
+├── lce.py                          # used by the smoke test and by 09 (LCE of the earlier project)
 │
-├── jobs/                       # generic Slurm job scripts (gpu.sbatch, cpu.sbatch)
-├── docs/GUIDE.md               # step-by-step guide: how every result was produced
-├── docs/RESULTS.md             # all result tables, final checkpoints and hyper-parameters
-├── results/                    # per-query metrics (.json) of every evaluation, significance/ tests
-├── logs/                       # Slurm .out / .err of the jobs that produced the results
-├── training_logs/              # args.json, train_log.csv, summary.json of each of the 115 training runs
-├── plots/                      # concept_model_plots.py and the figures (plots/figures/)
-├── requirements.txt            # direct dependencies
-└── requirements_env.txt        # exact versions of the environment used for all experiments
+├── jobs/                           # generic Slurm job scripts (gpu.sbatch, cpu.sbatch)
+├── docs/GUIDE.md                   # step-by-step guide: how every result was produced
+├── docs/RESULTS.md                 # all result tables, final checkpoints and hyper-parameters
+├── results/ logs/ training_logs/   # not tracked: download them from the v1.0 release (see Reproducibility)
+├── plots/                          # concept_model_plots.py and the figures (plots/figures/)
+├── requirements.txt                # direct dependencies
+└── requirements_env.txt            # exact versions of the environment used for all experiments
 ```
 
-`results/`, `logs/` and `training_logs/` are copies of the files written on the cluster; the scripts themselves write
-under `$WORK_DIR`. Checkpoints, embeddings and caches (about 260 GB) are **not** in the repository.
+`results/`, `logs/` and `training_logs/` are not in the repository: they are archived in the [v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0).
+
+The scripts themselves write under `$WORK_DIR`. Checkpoints, embeddings and caches (about 260 GB) are **not** distributed.
 
 ## Quickstart
 
