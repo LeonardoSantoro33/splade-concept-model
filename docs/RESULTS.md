@@ -126,7 +126,9 @@ The difference between Frozen and Random W follows the same pattern in and out o
 
 ## 4. Hybrids with SPLADE
 
-A hybrid mixes SPLADE and the Concept Model in a single score, (1−λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d), where λ = 0 is SPLADE alone and λ = 1 is the Concept Model alone. λ\* is chosen on 1,000 validation queries with a full-corpus search over 21 values (0, 0.05, …, 1). The variants are:
+A hybrid mixes SPLADE and the Concept Model in a single score: (1−λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d), where λ = 0 is SPLADE alone and λ = 1 is the Concept Model alone.
+
+λ\* is chosen on 1,000 validation queries with a full-corpus search over 21 values (0, 0.05, …, 1). The variants are:
 
 - **`hyb`**: the formula above, with g from the checkpoint (frozen or e2e); for the e2e checkpoints it needs the SPLADE index and the re-trained encoder's index;
 - **`hyb1`** (e2e only): the SPLADE term also comes from the re-trained encoder, so only one encoder index is needed;
