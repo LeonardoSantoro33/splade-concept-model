@@ -225,7 +225,7 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 | `hyb` **k = 4096** (SPLADE + Concept Model, λ = 0.30) | **0.3880** (101.4%)<br>p = 0.0001 | 0.4661 (100.0%) | 2 (19.1 GB) |
 | `hyb` **k = 256** (SPLADE + Concept Model, λ = 0.20) | **0.3901** (101.9%)<br>p = 0.0001 | 0.4646 (99.7%) | 2 (15.8 GB) |
 
-Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen only on the MS MARCO validation set) beats SPLADE in domain (+2.4% MRR@10, p = 0.0001) and stays at the level of SPLADE out of domain on the 3 BEIR datasets tested (mean nDCG@10 100.3% of SPLADE, not significant). The price is a second sparse index (+86% of space: 15.8 GB against 8.5 GB).
+Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen only on the MS MARCO validation set) beats SPLADE in domain (+2.4% MRR@10, p = 0.0001) and stays at the level of SPLADE out of domain on the 3 BEIR datasets tested (mean nDCG@10 100.3% of SPLADE, not significant). The price is a second sparse index (+86% of space: 15.8 GB against 8.5 GB), as illustrated in the following section.
 
 ## 6. Space (8.84M passages, raw sizes)
 
