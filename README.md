@@ -76,8 +76,7 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 
 ## Repository structure
 
-Scripts are flat and numbered in execution order, and every command in the logs refers to them by this name,
-so they are deliberately not moved into a package.
+Scripts are kept flat in the repository root and numbered in execution order. Every command in the logs calls them by these names, so they are deliberately not moved into a `src/` package.
 
 ```
 .
