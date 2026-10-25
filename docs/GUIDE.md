@@ -16,7 +16,6 @@ are in [`RESULTS.md`](RESULTS.md); the exact hyper-parameters of the final check
 | Evaluation out of domain | zero-shot BEIR (NFCorpus, SciFact, FiQA) | `10_eval_beir.py` |
 | Hybrids | mix with SPLADE, λ chosen on validation | `11_eval_hybrid.py` |
 | Statistics | paired per-query tests | `12_significance.py` |
-| Legacy | LCE baseline of the earlier SPLARE project | `09_lce_splade.py`, `lce.py` |
 
 ---
 
