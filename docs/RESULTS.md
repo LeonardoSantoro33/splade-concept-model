@@ -122,16 +122,16 @@ SPLADE: NFCorpus 0.3486, SciFact 0.7024, FiQA 0.3476, **mean 0.4662** (R@100 mea
 For random W and frozen, the share of SPLADE kept is the same in and out of domain (within 1–2 points at every k). For
 e2e it is much lower out of domain at small k (89.4% in domain vs 72.3% on BEIR at k = 256): the gain is a specialisation
 to MS MARCO. SciFact (scientific claims) is the most penalised and FiQA (natural-language questions, close to MS MARCO) the most favoured.
-Learned W minus random W (BEIR mean): +0.024, +0.009, −0.001, +0.006, 0.000, +0.0005 for k = 256 … 8192, the same pattern as in domain.
-
-**Frozen hybrid vs. e2e hybrid on BEIR, per dataset (18 tests; Δ = frozen − e2e, permutation p).** Frozen is never significantly worse.
-It is better in 4 of 18 cases at the 5% level: SciFact at 512 (+0.0137, p = 0.020), 1024 (+0.0193, p = 0.004) and 8192 (+0.0113, p = 0.029), FiQA at
-8192 (+0.0094, p = 0.010). None survives Bonferroni (0.05 / 18 ≈ 0.0028): a consistent tendency, not strong evidence.
+The difference between Frozen and Random W follows the same pattern in and out of domain: training W helps clearly at k = 256, a little at k = 512, and from k = 1024 upwards the learned W is almost indistinguishable from a random one.
 
 ## 4. Hybrids with SPLADE
 
-λ\* is chosen on 1,000 validation queries with a full-corpus search over 21 values; 8192 chose λ\* = 1 for the e2e hybrid
-(SPLADE excluded: it coincides with the e2e model alone).
+A hybrid mixes SPLADE and the Concept Model in a single score, (1−λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d), where λ = 0 is SPLADE alone and λ = 1 is the Concept Model alone. λ\* is chosen on 1,000 validation queries with a full-corpus search over 21 values (0, 0.05, …, 1). The variants are:
+
+- **`hyb`**: the formula above, with g from the checkpoint (frozen or e2e); for the e2e checkpoints it needs the SPLADE index and the re-trained encoder's index;
+- **`hyb1`** (e2e only): the SPLADE term also comes from the re-trained encoder, so only one encoder index is needed;
+- **`hybnoW`** (e2e only): no W, SPLADE mixed with the re-trained encoder used as plain SPLADE;
+- **`ftsplade`** (e2e only): the re-trained encoder alone (λ = 0 of `hyb1`).
 
 **dev MRR@10 and BEIR mean nDCG@10 (λ\* in brackets)**
 
