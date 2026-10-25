@@ -287,7 +287,7 @@ pip install matplotlib
 python plots/concept_model_plots.py       # writes plots/figures/fig1…fig4 as .png and .pdf
 ```
 
-The numbers are in the dictionaries at the top of the script; edit them there if a result changes.
+The numbers are in the dictionaries at the top of the script. Edit manually them there if a result changes.
 
 ---
 
