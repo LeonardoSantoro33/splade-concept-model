@@ -159,19 +159,12 @@ archive is only needed to inspect or verify individual runs.
 
 ## Legacy note on LCE
 
-`09_lce_splade.py` and `lce.py` implement Latent Concept Expansion (a training-free expansion with a corpus
-co-occurrence matrix), the baseline of the earlier SPLARE project. It is not part of the results above;
-`lce.py` is kept because `00_smoke_test.py` imports it.
+`09_lce_splade.py` and `lce.py` implement Latent Concept Expansion (a training-free expansion with a corpus co-occurrence matrix), the baseline of the SPLARE project.
+They are not part of the results above. They are kept because `00_smoke_test.py` imports `lce.py` and runs `09_lce_splade.py`, and could always be useful in future work.
 
-## References
+## Acknowledgements
 
-- Formal et al., *SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking*, SIGIR 2021.
-- Formal et al., *From Distillation to Hard Negative Sampling: Making Sparse Neural IR Models More Effective* (SPLADE++), SIGIR 2022.
-- Thakur et al., *BEIR: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models*, NeurIPS 2021.
-- Bajaj et al., *MS MARCO: A Human Generated MAchine Reading COmprehension Dataset*, 2016.
-- Koh et al., *Concept Bottleneck Models*, ICML 2020.
-- Xiong et al., *Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval* (ANCE), ICLR 2021.
-- Bruch et al., *Efficient Inverted Indexes for Approximate Retrieval over Learned Sparse Representations* (Seismic), SIGIR 2024.
+This work builds on SPLADE (Formal et al., SIGIR 2021) and uses the MS MARCO and BEIR datasets.
 
 ## License
 
