@@ -139,6 +139,28 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | `hybnoW` | `(1−λ)·SPLADE(q)·SPLADE(d) + λ·SPLADE_θ(q)·SPLADE_θ(d)` | • Index of the original SPLADE<br>• Sparse vectors of the re-trained encoder θ | The second term does not use `g` (that is, `W·SPLADE_θ`) but `SPLADE_θ` directly, without W. |
 | `ftsplade` (ft = fine-tuned SPLADE) | `SPLADE_θ(q)·SPLADE_θ(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | Same as `hyb1` with λ = 0: the re-trained e2e encoder used directly as a plain SPLADE. |
 
+**Hybrids, in domain: dev MRR@10 (% of SPLADE)**. SPLADE alone: 0.3828.
+
+| k | Frozen hybrid | λ\* | e2e hybrid (`hyb`) | λ\* | `hybnoW` | λ\* | `ftsplade` |
+|---|---|---|---|---|---|---|---|
+| 256 | 0.3835 (100.2%) | 0.05 | 0.3901 (101.9%) | 0.20 | **0.3920 (102.4%)** | 0.40 | 0.3798 (99.2%) |
+| 512 | 0.3815 (99.7%) | 0.15 | 0.3873 (101.2%) | 0.40 | 0.3910 (102.1%) | 0.45 | 0.3856 (100.7%) |
+| 1024 | 0.3779 (98.7%) | 0.45 | 0.3855 (100.7%) | 0.75 | 0.3915 (102.3%) | 0.50 | 0.3884 (101.5%) |
+| 2048 | 0.3828 (100.0%) | 0.00 | 0.3881 (101.4%) | 0.40 | 0.3908 (102.1%) | 0.90 | 0.3900 (101.9%) |
+| 4096 | 0.3831 (100.1%) | 0.10 | 0.3880 (101.4%) | 0.30 | 0.3887 (101.5%) | 0.90 | 0.3879 (101.3%) |
+| 8192 | 0.3806 (99.4%) | 0.85 | 0.3722 (97.2%) | 1.00 | 0.3847 (100.5%) | 0.40 | 0.3832 (100.1%) |
+
+**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**. SPLADE alone: 0.4662. Same λ\* as above.
+
+| k | Frozen hybrid | λ\* | e2e hybrid (`hyb`) | λ\* | `hybnoW` | λ\* | `ftsplade` |
+|---|---|---|---|---|---|---|---|
+| 256 | 0.4659 (99.9%) | 0.05 | 0.4646 (99.7%) | 0.20 | **0.4676 (100.3%)** | 0.40 | 0.4248 (91.1%) |
+| 512 | 0.4642 (99.6%) | 0.15 | 0.4608 (98.8%) | 0.40 | 0.4646 (99.7%) | 0.45 | 0.4419 (94.8%) |
+| 1024 | 0.4604 (98.8%) | 0.45 | 0.4510 (96.7%) | 0.75 | 0.4654 (99.8%) | 0.50 | 0.4513 (96.8%) |
+| 2048 | 0.4662 (100.0%) | 0.00 | 0.4630 (99.3%) | 0.40 | 0.4555 (97.7%) | 0.90 | 0.4517 (96.9%) |
+| 4096 | 0.4660 (100.0%) | 0.10 | 0.4661 (100.0%) | 0.30 | 0.4617 (99.0%) | 0.90 | 0.4598 (98.6%) |
+| 8192 | 0.4617 (99.0%) | 0.85 | 0.4541 (97.4%) | 1.00 | 0.4646 (99.7%) | 0.40 | 0.4606 (98.8%) |
+
 **dev MRR@10 and BEIR mean nDCG@10 (λ\* in brackets)**
 
 | k | Frozen hybrid dev | e2e hybrid (`hyb`) dev | `hybnoW` dev | Frozen hybrid BEIR | `hyb` BEIR | `hybnoW` BEIR |
