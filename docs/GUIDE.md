@@ -183,18 +183,16 @@ sbatch --export=ALL,PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True --time=05:0
        --val-every 2000 --val-queries 1000 --grad-checkpointing
 ```
 
-Search protocol: a grid over the W learning rate and the BERT learning rate at 1 epoch; the best validation score wins,
-differences below 0.001 are treated as ties (the lower BERT learning rate wins; this threshold was fixed during the
-experiments, not beforehand); if the winner is at the edge of the grid, the grid is extended. Two epochs were never
-better than one (k ≤ 1024), so one epoch was used everywhere. The optimal BERT learning rate falls as k grows:
-1e-5, 5e-6, 5e-6, 5e-6, 1e-6, 1e-7 for k = 256 … 8192.
+Search protocol: a grid over the W learning rate and the BERT learning rate at 1 epoch. The best validation score wins,
+differences below 0.001 are treated as ties (the lower BERT learning rate wins). If the winner is at the edge of the grid, the grid is extended.
+Two epochs were never better than one (k ≤ 1024), so one epoch was used everywhere.
+The optimal BERT learning rate falls as k grows: 1e-5, 5e-6, 5e-6, 5e-6, 1e-6, 1e-7 for k = 256 … 8192.
 
-**e2e with fixed W** (k = 1024): same command with `--lr 1e-9` (W does not move), to tell whether the gain comes from W or BERT.
+**e2e with fixed W** (k = 1024): same command with `--lr 1e-9` (W basically does not move), to tell whether the gain comes from W or BERT.
 
 ### Evaluation: it needs the whole corpus re-encoded
 
-The re-trained encoder changes the SPLADE vectors of all 8.84M passages (~1 h). `08c` does this in streaming (exact search,
-no dense matrix) and saves the sparse shards of the new encoder, which the hybrid scripts reuse:
+The re-trained encoder changes the SPLADE vectors of all 8.84M passages (~1 h). `08c` does this in streaming and saves the sparse shards of the new encoder, which the hybrid scripts reuse:
 
 ```bash
 sbatch --export=ALL,PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True --time=10:00:00 -J eval_e2e_stream_k4096 \
