@@ -150,7 +150,7 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | 4096 | 0.3831 (100.1%) | 0.10 | 0.3880 (101.4%) | 0.30 | 0.3887 (101.5%) | 0.90 | 0.3879 (101.3%) |
 | 8192 | 0.3806 (99.4%) | 0.85 | 0.3722 (97.2%) | 1.00 | 0.3847 (100.5%) | 0.40 | 0.3832 (100.1%) |
 
-**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**. SPLADE alone: 0.4662. Same λ\* as above.
+**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**. SPLADE alone: 0.4662.
 
 | k | Frozen hybrid | λ\* | e2e hybrid (`hyb`) | λ\* | `hybnoW` | λ\* | `ftsplade` |
 |---|---|---|---|---|---|---|---|
@@ -161,48 +161,59 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | 4096 | 0.4660 (100.0%) | 0.10 | 0.4661 (100.0%) | 0.30 | 0.4617 (99.0%) | 0.90 | 0.4598 (98.6%) |
 | 8192 | 0.4617 (99.0%) | 0.85 | 0.4541 (97.4%) | 1.00 | 0.4646 (99.7%) | 0.40 | 0.4606 (98.8%) |
 
-**dev MRR@10 and BEIR mean nDCG@10 (λ\* in brackets)**
+## 5. Significance tests
 
-| k | Frozen hybrid dev | e2e hybrid (`hyb`) dev | `hybnoW` dev | Frozen hybrid BEIR | `hyb` BEIR | `hybnoW` BEIR |
-|---|---|---|---|---|---|---|
-| 256 | 0.3835 (0.05) | 0.3901 (0.20) | **0.3920 (0.40)** | 0.4659 | 0.4646 | **0.4676** |
-| 512 | 0.3815 (0.15) | 0.3873 (0.40) | 0.3910 (0.45) | 0.4642 | 0.4608 | 0.4646 |
-| 1024 | 0.3779 (0.45) | 0.3855 (0.75) | 0.3915 (0.50) | 0.4604 | 0.4510 | 0.4654 |
-| 2048 | 0.3828 (0.00) | 0.3881 (0.40) | 0.3908 (0.90) | 0.4662 | 0.4630 | 0.4555 |
-| 4096 | 0.3831 (0.10) | 0.3880 (0.30) | 0.3887 (0.90) | 0.4660 | 0.4661 | 0.4617 |
-| 8192 | 0.3806 (0.85) | 0.3722 (1.00) | 0.3847 (0.40) | 0.4617 | 0.4541 | 0.4646 |
+All tests are paired and two-sided: Δ = B − A, 95% bootstrap confidence interval, permutation p-value (10,000 sign flips).
 
-SPLADE: dev 0.3828, BEIR 0.4662.
+**Which variant is better?** Differences in dev MRR@10 (6,980 queries) between the variants of the hybrid, k by k. A negative `hyb` − `hybnoW` means that the hybrid without W is better; "yes" means p < 0.05.
 
-**Significance on dev (B − A, permutation p; 6,980 queries)**
+| k | `hyb` − `hybnoW` | `hyb1` − SPLADE | `ftsplade` − SPLADE |
+|---|---|---|---|
+| 256 | −0.0019, p = 0.13 (no) | −0.0025, p = 0.38 (no) | −0.0030, p = 0.28 (no) |
+| 512 | −0.0038, p = 0.009 (yes: without W is better) | +0.0028, p = 0.26 (no) | +0.0028, p = 0.26 (no) |
+| 1024 | −0.0060, p = 0.003 (yes: without W is better) | +0.0068, p = 0.006 (yes) | +0.0056, p = 0.019 (yes) |
+| 2048 | −0.0028, p = 0.11 (no) | +0.0072, p = 0.002 (yes) | +0.0072, p = 0.002 (yes) |
+| 4096 | −0.0007, p = 0.68 (no) | +0.0066, p = 0.002 (yes) | +0.0051, p = 0.013 (yes) |
+| 8192 | −0.0125, p = 0.0001 (yes: without W is better) | −0.0106, p = 0.0001 (yes, but worse) | +0.0004, p = 0.81 (no) |
 
-| Comparison | 256 | 512 | 1024 | 2048 | 4096 | 8192 |
-|---|---|---|---|---|---|---|
-| `hyb` − SPLADE | +0.0073, p = 0.0001 | +0.0045, p = 0.009 | +0.0027, p = 0.25 | +0.0053, p = 0.001 | +0.0052, p = 0.0001 | −0.0106, p = 0.0001 |
-| `hyb` − `hybnoW` | −0.0019, p = 0.13 | −0.0038, p = 0.009 | −0.0060, p = 0.003 | −0.0028, p = 0.11 | −0.0007, p = 0.68 | −0.0125, p = 0.0001 |
-| `hyb1` − SPLADE | −0.0025, p = 0.38 | +0.0028, p = 0.26 | +0.0068, p = 0.006 | +0.0072, p = 0.002 | +0.0066, p = 0.002 | −0.0106, p = 0.0001 |
-| `ftsplade` − SPLADE | −0.0030, p = 0.28 | +0.0028, p = 0.26 | +0.0056, p = 0.019 | +0.0072, p = 0.002 | +0.0051, p = 0.013 | +0.0004, p = 0.81 |
+The hybrid without W is never worse than the one with W: the Concept Model helps by training the encoder, not at search time. The re-trained encoder alone (`ftsplade`) and `hyb1` beat SPLADE significantly in domain at k = 1024–4096 and are not better at the extremes; at k = 8192 `hyb1` is worse because λ\* = 1 leaves only the e2e model.
 
-`hybnoW` k = 256 − SPLADE: dev MRR@10 +0.0092 [+0.0063, +0.0123], p = 0.0001; nDCG@10 +0.0089, p = 0.0001; R@1000 +0.0010,
-p = 0.10 (not significant). `hybnoW` k = 8192 − SPLADE: +0.0019 [+0.0002, +0.0037], p = 0.034.
-The hybrid without W is never worse than the one with W; the Concept Model helps through training the encoder, not at search time.
-Recall at 1000 never changes significantly: the gains are in the ordering of the top results.
+**The best hybrid against SPLADE, in domain** (`hybnoW`, k = 256, λ\* = 0.40; dev, 6,980 queries). The gain is in the ordering of the top results: MRR@10 and nDCG@10 improve significantly, while recall at 1000 does not change.
 
-**`hybnoW` k = 256 against SPLADE on BEIR, per dataset (nDCG@10):** NFCorpus −0.0039 (p = 0.056), SciFact +0.0023 (p = 0.69),
-FiQA +0.0058 (p = 0.022); NFCorpus R@1000 +0.0179 (p = 0.006). Not significant after correcting for 3 (or 9) tests: the
-hybrid is *at the level of* SPLADE out of domain, not better.
+| Metric | SPLADE | `hybnoW` | Δ | 95% CI | p (perm.) |
+|---|---|---|---|---|---|
+| MRR@10 | 0.3828 | 0.3920 | **+0.0092** | [+0.0063, +0.0123] | 0.0001 |
+| nDCG@10 | 0.4489 | 0.4577 | **+0.0089** | [+0.0063, +0.0114] | 0.0001 |
+| R@1000 | 0.9831 | 0.9841 | +0.0010 | [−0.0001, +0.0022] | 0.10 |
 
-**The re-trained encoder alone (`ftsplade`)**, one index, plain SPLADE scoring:
+**The same system out of domain**, per BEIR dataset. No consistent gain: only FiQA improves (nDCG@10 and MRR@10), NFCorpus is slightly worse in precision but better in recall, and SciFact does not change.
 
-| k | 256 | 512 | 1024 | 2048 | 4096 | 8192 |
-|---|---|---|---|---|---|---|
-| dev MRR@10 | 0.3798 | 0.3856 | 0.3884 | 0.3900 | 0.3879 | 0.3832 |
-| BEIR mean nDCG@10 (% SPLADE) | 0.4248 (91.1%) | 0.4419 (94.8%) | 0.4513 (96.8%) | 0.4517 (96.9%) | 0.4598 (98.6%) | 0.4606 (98.8%) |
+*NFCorpus (323 queries)*
 
-It beats SPLADE in domain at k = 1024–4096 (best +0.0072, +1.9%, p = 0.002, at k = 2048; this one also survives a correction for
-the number of k values tested) but is below it on BEIR at every k. Index: 7.3–11.8 GB (+21% to +39% over SPLADE).
+| Metric | SPLADE | `hybnoW` | Δ | 95% CI | p (perm.) |
+|---|---|---|---|---|---|
+| MRR@10 | 0.5782 | 0.5679 | −0.0104 | [−0.0213, −0.0001] | 0.053 |
+| nDCG@10 | 0.3486 | 0.3447 | −0.0039 | [−0.0080, +0.0000] | 0.056 |
+| R@1000 | 0.5907 | 0.6087 | **+0.0179** | [+0.0052, +0.0319] | **0.006** |
 
-## 5. Space (8.84M passages, raw sizes)
+*SciFact (300 queries)*
+
+| Metric | SPLADE | `hybnoW` | Δ | 95% CI | p (perm.) |
+|---|---|---|---|---|---|
+| MRR@10 | 0.6699 | 0.6742 | +0.0042 | [−0.0088, +0.0173] | 0.54 |
+| nDCG@10 | 0.7024 | 0.7047 | +0.0023 | [−0.0084, +0.0130] | 0.69 |
+| R@1000 | 0.9867 | 0.9933 | +0.0067 | [+0.0000, +0.0167] | 0.50 |
+
+*FiQA (648 queries)*
+
+| Metric | SPLADE | `hybnoW` | Δ | 95% CI | p (perm.) |
+|---|---|---|---|---|---|
+| MRR@10 | 0.4180 | 0.4277 | **+0.0097** | [+0.0011, +0.0186] | **0.030** |
+| nDCG@10 | 0.3476 | 0.3534 | **+0.0058** | [+0.0009, +0.0107] | **0.022** |
+| R@1000 | 0.8402 | 0.8460 | +0.0057 | [−0.0014, +0.0128] | 0.12 |
+
+
+## 6. Space (8.84M passages, raw sizes)
 
 | System | Stored per document | Total |
 |---|---|---|
