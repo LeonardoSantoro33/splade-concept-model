@@ -141,8 +141,6 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 
 **Hybrids, in domain: dev MRR@10 (% of SPLADE)**:
 
-SPLADE alone: 0.3828.
-
 | k | Frozen hybrid | λ\* | e2e hybrid (`hyb`) | λ\* | `hybnoW` | λ\* | `ftsplade` |
 |---|---|---|---|---|---|---|---|
 | 256 | 0.3835 (100.2%) | 0.05 | 0.3901 (101.9%) | 0.20 | **0.3920 (102.4%)** | 0.40 | 0.3798 (99.2%) |
@@ -152,9 +150,9 @@ SPLADE alone: 0.3828.
 | 4096 | 0.3831 (100.1%) | 0.10 | 0.3880 (101.4%) | 0.30 | 0.3887 (101.5%) | 0.90 | 0.3879 (101.3%) |
 | 8192 | 0.3806 (99.4%) | 0.85 | 0.3722 (97.2%) | 1.00 | 0.3847 (100.5%) | 0.40 | 0.3832 (100.1%) |
 
-**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**:
+SPLADE alone: 0.3828.
 
-SPLADE alone: 0.4662.
+**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**:
 
 | k | Frozen hybrid | λ\* | e2e hybrid (`hyb`) | λ\* | `hybnoW` | λ\* | `ftsplade` |
 |---|---|---|---|---|---|---|---|
@@ -164,6 +162,8 @@ SPLADE alone: 0.4662.
 | 2048 | 0.4662 (100.0%) | 0.00 | 0.4630 (99.3%) | 0.40 | 0.4555 (97.7%) | 0.90 | 0.4517 (96.9%) |
 | 4096 | 0.4660 (100.0%) | 0.10 | 0.4661 (100.0%) | 0.30 | 0.4617 (99.0%) | 0.90 | 0.4598 (98.6%) |
 | 8192 | 0.4617 (99.0%) | 0.85 | 0.4541 (97.4%) | 1.00 | 0.4646 (99.7%) | 0.40 | 0.4606 (98.8%) |
+
+SPLADE alone: 0.4662.
 
 ## 5. Significance tests
 
