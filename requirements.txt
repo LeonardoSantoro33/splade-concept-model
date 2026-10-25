@@ -1,0 +1,7 @@
+# Tested with Python 3.11
+torch==2.6.0
+transformers>=5.0
+numpy>=1.26
+scipy
+pandas
+ranx                  # optional: only used by the test suite to cross-check the metrics

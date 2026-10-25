@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data, caches and models (never commit these: they live in WORK_DIR on the cluster)
+*.bin
+*.npy
+*.npz
+*.pt
+*.pth
+*.safetensors
+*.trec
+*.tsv.gz
+*.tar.gz
+*.tgz
+*.zip
+data/
+cache/
+models/
+embeddings/
+runs/
+work/
+logs/
+training_logs/
+results/
+*.tar.gz
