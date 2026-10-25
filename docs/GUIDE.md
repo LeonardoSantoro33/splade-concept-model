@@ -147,7 +147,7 @@ What we learned while tuning (validation MRR@10, 1,000 queries, SPLADE = 0.3639)
 - for k = 2048, 4096, 8192: `--init-std 0.0221 / 0.0156 / 0.0110 --lr 3e-5 --epochs 5 --val-every 250`.
 
 The **random-W baseline** is the same architecture with W left at its initialisation (`init-std = 1/√k`), obtained by
-running the training for one step with a negligible learning rate; the checkpoints are named `frozen_k<k>_rand`:
+running the training for one step with a negligible learning rate. The checkpoints are named `frozen_k<k>_rand`:
 
 ```bash
 sbatch -J cm_rand_k1024 jobs/gpu.sbatch 06_train_concept_model.py --mode frozen --k 1024 --run-name frozen_k1024_rand \
