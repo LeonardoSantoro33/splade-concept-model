@@ -61,10 +61,8 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 
 ### Take-aways
 
-1. **A linear projection of SPLADE to k dimensions keeps 73–98% of SPLADE's effectiveness with the encoder
-   frozen** (72–99% on BEIR), and the share kept is the same in and out of domain: compression does not make the
-   model more fragile on new domains.
-2. **k is the main lever. Learning W helps only at small k** (+0.025 MRR@10 at k = 256, +0.013 at 512); from
+1. **A linear projection of SPLADE to k dimensions, with the encoder frozen, keeps 73–98% of SPLADE's quality on MS MARCO and 72–99% on BEIR.** The percentage is about the same in and out of domain, so compressing     SPLADE does not make it worse on new datasets.
+2. **k is the main lever. Learning W helps only at small k** (+0.025 MRR@10 at k = 256, +0.013 at 512). From
    k = 1024 on, a random projection is statistically indistinguishable from a learned one.
 3. **Re-training the encoder (e2e) closes the gap in-domain**: 97.5% of SPLADE at k = 1024 and a tie with SPLADE
    at k = 4096 (0.3829 vs 0.3828). At equal in-domain quality the e2e model needs about 4× less space than the frozen one (e2e k = 1024 ≈ frozen k = 4096). Almost all of the gain comes from BERT, not
