@@ -246,7 +246,7 @@ The `--variant` option (e2e checkpoints only) selects what is mixed:
 | `hybnoW_…` | `now` | `(1-λ)·SPLADE·SPLADE + λ·SPLADE_θ·SPLADE_θ` (no W) | 2 |
 | `ftsplade_…` | (`single` with λ = 0) | `SPLADE_θ·SPLADE_θ` | 1 |
 
-(`SPLADE_θ` is the re-trained encoder.) The variants only reuse the shards written by `08c` and take about 5 minutes.
+`SPLADE_θ` is the re-trained encoder. The variants only reuse the shards written by `08c` and take about 5 minutes.
 
 Hybrids on BEIR use the λ\* found on MS MARCO validation (nothing is chosen on BEIR):
 
