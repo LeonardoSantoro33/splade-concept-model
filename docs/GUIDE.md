@@ -215,9 +215,8 @@ sbatch --time=01:00:00 -J beir_frozen_k1024 jobs/gpu.sbatch 10_eval_beir.py --da
        --ckpts frozen_k1024_r2_lr3e5
 ```
 
-`--ckpts` accepts random-W, frozen and e2e checkpoints; no model is re-trained on BEIR. `--ft-splade` evaluates the
-re-trained encoder of an e2e checkpoint as a plain SPLADE (W discarded). SPLADE gives 0.3486 / 0.7024 / 0.3476
-(mean 0.4662), in line with the published numbers for this model.
+`--ckpts` accepts random-W, frozen and e2e checkpoints. No model is re-trained on BEIR. `--ft-splade` evaluates the
+re-trained encoder of an e2e checkpoint as a plain SPLADE (W discarded).
 
 ---
 
