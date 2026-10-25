@@ -7,7 +7,7 @@ SciFact 300, FiQA 648 queries). Differences below about 0.02 on DL19 / DL20 are 
 ## 1. Final checkpoints
 
 Chosen on validation (1,000 held-out training queries, SPLADE = 0.3639), never on dev or BEIR. All use `--negatives splade
---n-hard 7 --neg-rank-min 3`, temperature 1, seed 42.
+--n-hard 7 --neg-rank-min 3`, temperature 1, seed 42. The init-std of the trained frozen runs is not 1/√k for k = 256 and 1024 (0.02), while it is for the others.
 
 **Frozen** (only W trained)
 
