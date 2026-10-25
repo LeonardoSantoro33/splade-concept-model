@@ -71,16 +71,8 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 5. **Mixing the re-trained encoder with SPLADE beats SPLADE in-domain and stays at the level of SPLADE out of domain**
    (best: `hybnoW`, k = 256). The price is a second sparse index (+86% space). Per-dataset BEIR tests against
    SPLADE show no significant difference after multiple-test correction.
-6. **W is not needed at search time**: the hybrid without W is never worse than the one with W (and significantly
-   better at k = 512, 1024, 8192). The Concept Model acts as a *training objective* that improves the encoder.
-7. **No saving in space.** SPLADE stores about 120 non-zeros per document (~1 KB); a dense k-dimensional fp16
+6. **No saving in space.** SPLADE stores about 120 non-zeros per document (~1 KB). A dense k-dimensional fp16
    vector is 2k bytes, so no variant is smaller than SPLADE at equal quality.
-8. The learned "concepts" are **not interpretable** (the top tokens of a concept are incoherent and zeroing the strongest
-   concept of a query does not change the rank of the relevant passage): information is distributed.
-
-Limits: one seed per configuration; hyper-parameter recipes are not identical across k (see `docs/RESULTS.md`);
-e2e queries are truncated to 64 tokens (256 for SPLADE and frozen); the 8192 results come from the same pipeline but
-validation was less reliable there. The headline `hybnoW` k = 256 is the best of the k values on dev (on validation k = 256 and 512 are tied, 0.3769 vs 0.3770), so it is a best-of-k pick; every k of `hybnoW` is in `docs/RESULTS.md`.
 
 ## Repository structure
 
