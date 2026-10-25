@@ -216,6 +216,16 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 | nDCG@10 | 0.3476 | 0.3534 | **+0.0058** | [+0.0009, +0.0107] | **0.022** |
 | R@1000 | 0.8402 | 0.8460 | +0.0057 | [−0.0014, +0.0128] | 0.12 |
 
+**Summary: the best configurations.**
+
+| System | MS MARCO dev MRR@10 | BEIR mean nDCG@10 | Indexes |
+|---|---|---|---|
+| Original SPLADE | 0.3828 | 0.4662 | 1 (8.5 GB) |
+| `hybnoW` **k = 256** (SPLADE + re-trained encoder, λ = 0.40) | **0.3920** (102.4%)<br>p = 0.0001 | 0.4676 (100.3%) | 2 (15.8 GB) |
+| `hyb` **k = 4096** (SPLADE + Concept Model, λ = 0.30) | **0.3880** (101.4%)<br>p = 0.0001 | 0.4661 (100.0%) | 2 (19.1 GB) |
+| `hyb` **k = 256** (SPLADE + Concept Model, λ = 0.20) | **0.3901** (101.9%)<br>p = 0.0001 | 0.4646 (99.7%) | 2 (15.8 GB) |
+
+Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen only on the MS MARCO validation set) beats SPLADE in domain (+2.4% MRR@10, p = 0.0001) and stays at the level of SPLADE out of domain on the 3 BEIR datasets tested (mean nDCG@10 100.3% of SPLADE, not significant). The price is a second sparse index (+86% of space: 15.8 GB against 8.5 GB).
 
 ## 6. Space (8.84M passages, raw sizes)
 
@@ -242,7 +252,3 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 | e2e hybrid 2048 | SPLADE index + sparse index of the e2e encoder (166.4 non-zeros; 11.8 GB) | ~2.3 KB | ~20.3 GB | ×2.4 |
 | e2e hybrid 4096 | SPLADE index + sparse index of the e2e encoder (148.6 non-zeros; 10.6 GB) | ~2.2 KB | ~19.1 GB | ×2.2 |
 | e2e hybrid 8192 | SPLADE index + sparse index of the e2e encoder (104.6 non-zeros; 7.5 GB) | ~1.8 KB | ~16.0 GB | ×1.88 |
-
-A sparse entry takes about 8 bytes (int32 id + fp32 weight) plus a per-document pointer. No Concept-Model variant is smaller
-than SPLADE at equal quality, because SPLADE stores only ~120 values per document while the dense model stores all k.
-bf16 has the same size as fp16; int8 would halve it and was not tried.
