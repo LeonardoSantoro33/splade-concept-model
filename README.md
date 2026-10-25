@@ -64,12 +64,10 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 1. **A linear projection of SPLADE to k dimensions, with the encoder frozen, keeps 73–98% of SPLADE's quality on MS MARCO and 72–99% on BEIR.** The percentage is about the same in and out of domain, so compressing     SPLADE does not make it worse on new datasets.
 2. **k is the main lever. Learning W helps only at small k** (+0.025 MRR@10 at k = 256, +0.013 at 512). From
    k = 1024 on, a random projection is statistically indistinguishable from a learned one.
-3. **Re-training the encoder (e2e) closes the gap in-domain**: 97.5% of SPLADE at k = 1024 and a tie with SPLADE
-   at k = 4096 (0.3829 vs 0.3828). At equal in-domain quality the e2e model needs about 4× less space than the frozen one (e2e k = 1024 ≈ frozen k = 4096). Almost all of the gain comes from BERT, not
-   from W (fixed random W at k = 1024: 0.3714 vs 0.3731 with trained W).
+3. **Re-training the encoder (e2e) closes most of the gap with SPLADE in domain**: the e2e model reaches 97.5% of SPLADE at k = 1024 (0.3731 vs 0.3828) and ties with it at k = 4096 (0.3829 vs 0.3828), while the frozen model reaches only 90.2% and 97.1% at the same k. For the same quality, e2e needs about 4× less space than frozen (e2e at k = 1024 ≈ frozen at k = 4096, 0.3731 vs 0.3717). The gain comes almost entirely from re-training BERT, not from W: with W fixed at its random initialisation, k = 1024 gives 0.3714, against 0.3731 with trained W.
 4. **The e2e gain is specific to MS MARCO.** Out of domain the e2e model does not meaningfully beat the frozen one at any k (at most +0.002 at k ≤ 512, negative from k = 2048).
    At k = 8192 it is worse than the frozen model even in domain (0.3722 vs 0.3766), although validation had predicted
-   the opposite; the optimal BERT learning rate keeps falling with k (1e-5 at k = 256, 1e-7 at k = 8192).
+   the opposite. The optimal BERT learning rate keeps falling with k (1e-5 at k = 256, 1e-7 at k = 8192).
 5. **Mixing the re-trained encoder with SPLADE beats SPLADE in-domain and stays at the level of SPLADE out of domain**
    (best: `hybnoW`, k = 256). The price is a second sparse index (+86% space). Per-dataset BEIR tests against
    SPLADE show no significant difference after multiple-test correction.
