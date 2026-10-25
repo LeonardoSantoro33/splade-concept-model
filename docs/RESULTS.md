@@ -31,9 +31,6 @@ Chosen on validation (1,000 held-out training queries, SPLADE = 0.3639), never o
 | 4096 | `frozen_k4096_rand` | 0.0156 | 1e-9 | 1 step | 0.3532 |
 | 8192 | `frozen_k8192_rand` | 0.0110 | 1e-9 | 1 step | 0.3614 |
 
-Random W (not trained): `frozen_k<k>_rand`, init-std 1/√k; validation 0.2384 / 0.3043 / 0.3380 / 0.3421 / 0.3532 / 0.3614.
-
-
 **e2e** (W and BERT trained, batch size 32, 1 epoch)
 
 | k | run | init-std | lr W | lr BERT | best val | frozen val |
@@ -45,11 +42,6 @@ Random W (not trained): `frozen_k<k>_rand`, init-std 1/√k; validation 0.2384 /
 | 2048 | `e2e_k2048_r2_is0221_lr3e5_bb5e6_b32_ep1` | 0.0221 | 3e-5 | 5e-6 | 0.3668 | 0.3507 |
 | 4096 | `e2e_k4096_r2_is0156_lr3e5_bb1e6_b32_ep1` | 0.0156 | 3e-5 | 1e-6 | 0.3641 | 0.3566 |
 | 8192 | `e2e_k8192_r2_is0110_lr3e5_bb1e7_b32_ep1` | 0.0110 | 3e-5 | 1e-7 | 0.3790 | 0.3692 |
-
-Declared caveats: recipes are not identical across k (k = 256 and 1024 of the frozen model keep the older init-std 0.02);
-the frozen k = 4096 checkpoint is at step 250, still in warm-up, so it is almost the random W; for k ≥ 2048 only the BERT
-learning rate was searched (W learning rate fixed at 3e-5); at k = 256 the winning W learning rate is at the edge of the grid;
-differences below 0.001 in the e2e grid were treated as ties, a threshold fixed during the experiments; one seed per configuration.
 
 ## 2. In domain: MS MARCO
 
