@@ -180,7 +180,7 @@ All tests are paired and two-sided: Δ = B − A, 95% bootstrap confidence inter
 | 4096 | −0.0007, p = 0.68 (no) | +0.0066, p = 0.002 (yes) | +0.0051, p = 0.013 (yes) |
 | 8192 | −0.0125, p = 0.0001 (yes: without W is better) | −0.0106, p = 0.0001 (yes, but worse) | +0.0004, p = 0.81 (no) |
 
-The hybrid without W is never worse than the one with W: the Concept Model helps by training the encoder, not at search time. The re-trained encoder alone (`ftsplade`) and `hyb1` beat SPLADE significantly in domain at k = 1024–4096 and are not better at the extremes; at k = 8192 `hyb1` is worse because λ\* = 1 leaves only the e2e model.
+The hybrid without W is never worse than the one with W: the Concept Model helps by training the encoder, not at search time. The re-trained encoder alone (`ftsplade`) and `hyb1` beat SPLADE significantly in domain at k = 1024–4096 and are not better at the extremes. At k = 8192 `hyb1` is worse because λ\* = 1 leaves only the e2e model.
 
 **The best hybrid against SPLADE, in domain** (`hybnoW`, k = 256, λ\* = 0.40; dev, 6,980 queries). The gain is in the ordering of the top results: MRR@10 and nDCG@10 improve significantly, while recall at 1000 does not change.
 
