@@ -225,9 +225,9 @@ re-trained encoder of an e2e checkpoint as a plain SPLADE (W discarded). SPLADE 
 
 Score `(1-λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)`. `11_eval_hybrid.py` runs in a single job:
 
-1. exact search on the 1,000 validation queries for 21 values of λ (0, 0.05, …, 1); λ\* = the best MRR@10;
+1. Exact search on the 1,000 validation queries for 21 values of λ (0, 0.05, …, 1) -> λ\* = the best MRR@10
 2. dev, DL19 and DL20 with λ\*, plus the checks λ = 0 (must reproduce SPLADE, 0.3828) and λ = 1 (must reproduce the
-   Concept Model alone).
+   Concept Model alone)
 
 ```bash
 # frozen: only SPLADE's index and W are needed
@@ -254,9 +254,6 @@ Hybrids on BEIR use the λ\* found on MS MARCO validation (nothing is chosen on 
 sbatch --time=01:00:00 -J beir_hyb_k256 jobs/gpu.sbatch 10_eval_beir.py --datasets nfcorpus scifact fiqa \
        --hybrid e2e_k256_r2_is0625_lr1e4_bb1e5_b32_ep1:now:0.40
 ```
-
-(`--hybrid RUN:VARIANT:LAMBDA`, with `VARIANT` = `two`, `now` or `single`; frozen checkpoints are accepted with `two` only.)
-The log also prints the λ = 1 case as a check.
 
 ---
 
