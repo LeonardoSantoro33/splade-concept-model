@@ -150,8 +150,7 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | 4096 | 0.3831 (0.10) | 0.3880 (0.30) | 0.3887 (0.90) | 0.4660 | 0.4661 | 0.4617 |
 | 8192 | 0.3806 (0.85) | 0.3722 (1.00) | 0.3847 (0.40) | 0.4617 | 0.4541 | 0.4646 |
 
-SPLADE: dev 0.3828, BEIR 0.4662. Index sizes: frozen hybrid 8.5–9.5 GB (SPLADE index + W); e2e hybrid and `hybnoW`
-15.8 / 16.7 / 18.8 / 20.3 / 19.1 / 16.0 GB.
+SPLADE: dev 0.3828, BEIR 0.4662.
 
 **Significance on dev (B − A, permutation p; 6,980 queries)**
 
