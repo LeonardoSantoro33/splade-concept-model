@@ -309,10 +309,4 @@ The numbers are in the dictionaries at the top of the script; edit them there if
 
 | Message | What to do |
 |---|---|
-| `Permission denied` on WORK_DIR | export `WORK_DIR` pointing to a directory you own |
 | `CUDA out of memory` | lower `--batch-size` (training) or `--q-batch` (search); use `--grad-checkpointing` and `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`; for k ≥ 2048 use the streaming evaluation (`08b` / `08c`) |
-| `not an e2e checkpoint with a backbone/ folder` | `--hybrid` in an old version of `10_eval_beir.py`; use the current one (accepts frozen checkpoints with `two`) |
-| Hugging Face connection errors | relaunch: the model stays cached after the first download |
-| `Cache not found` | an earlier script has not been run (see the order above) |
-| `03` prints `WARNING` | the provided vectors come from a different SPLADE checkpoint: ask the data provider |
-| the terminal freezes | you printed a large `.json`: `grep` the logs instead |
