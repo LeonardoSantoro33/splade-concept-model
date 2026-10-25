@@ -152,6 +152,20 @@ export WORK_DIR=/path/to/large/scratch/splade_concept   # caches, checkpoints, r
 Every long step is a Slurm job; the complete sequence, with the exact commands, is in [`docs/GUIDE.md`](docs/GUIDE.md).
 The figures are produced with `python plots/concept_model_plots.py` (numbers are written inside the script).
 
+## Reproducibility
+
+All raw training logs (115 runs) and evaluation outputs are archived in the
+[v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0)
+as `splade-concept-model-logs-results.tar.gz`. To restore them, extract the
+archive in the repository root:
+
+```
+tar xzf splade-concept-model-logs-results.tar.gz
+```
+
+Final numbers are summarised in [`docs/RESULTS.md`](docs/RESULTS.md); the
+archive is only needed to inspect or verify individual runs.
+
 ## Legacy note on LCE
 
 `09_lce_splade.py` and `lce.py` implement Latent Concept Expansion (a training-free expansion with a corpus
