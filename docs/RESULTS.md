@@ -139,7 +139,7 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 | `hybnoW` | `(1−λ)·SPLADE(q)·SPLADE(d) + λ·SPLADE_θ(q)·SPLADE_θ(d)` | • Index of the original SPLADE<br>• Sparse vectors of the re-trained encoder θ | The second term does not use `g` (that is, `W·SPLADE_θ`) but `SPLADE_θ` directly, without W. |
 | `ftsplade` (ft = fine-tuned SPLADE) | `SPLADE_θ(q)·SPLADE_θ(d)` | • ~~Index of the original SPLADE~~<br>• Sparse vectors of the re-trained encoder θ | Same as `hyb1` with λ = 0: the re-trained e2e encoder used directly as a plain SPLADE. |
 
-**Hybrids, in domain: dev MRR@10 (% of SPLADE)**.
+**Hybrids, in domain: dev MRR@10 (% of SPLADE)**:
 
 SPLADE alone: 0.3828.
 
@@ -152,7 +152,7 @@ SPLADE alone: 0.3828.
 | 4096 | 0.3831 (100.1%) | 0.10 | 0.3880 (101.4%) | 0.30 | 0.3887 (101.5%) | 0.90 | 0.3879 (101.3%) |
 | 8192 | 0.3806 (99.4%) | 0.85 | 0.3722 (97.2%) | 1.00 | 0.3847 (100.5%) | 0.40 | 0.3832 (100.1%) |
 
-**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**.
+**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**:
 
 SPLADE alone: 0.4662.
 
