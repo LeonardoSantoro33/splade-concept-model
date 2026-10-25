@@ -229,13 +229,6 @@ Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen 
 
 ## 6. Space (8.84M passages, raw sizes)
 
-| System | Stored per document | Total |
-|---|---|---|
-| SPLADE | sparse index, ~120 non-zeros | ~8.5 GB |
-| Concept Model alone | k fp16 numbers | 4.5 / 9.1 / 18.1 / 36.2 / 72.4 / 144.9 GB for k = 256 … 8192 |
-| Frozen hybrid | SPLADE index + W once (30,522 × k fp32, 31 MB to 1.0 GB) | 8.5–9.5 GB |
-| e2e hybrid, `hybnoW` | SPLADE index + sparse index of the re-trained encoder (102 / 115 / 145 / 166 / 149 / 105 non-zeros) | 15.8 / 16.7 / 18.8 / 20.3 / 19.1 / 16.0 GB |
-
 | System | Stored per document | Bytes/doc (raw) | Total (8.84M docs) | vs. SPLADE |
 |---|---|---|---|---|
 | SPLADE | original sparse index (~120 non-zeros) | ~1.0 KB | ~8.5 GB | ×1.00 |
