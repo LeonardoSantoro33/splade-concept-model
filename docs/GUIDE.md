@@ -2,7 +2,7 @@
 
 This guide lists, in execution order, the commands used to produce the results in the README, on a Slurm cluster
 (ISTI-CNR, A100 40 GB nodes, partition `long`). All commands are run from the repository directory. Result tables
-are in [`RESULTS.md`](RESULTS.md), where the exact hyper-parameters of the final checkpoints are in its first section.
+are in [`RESULTS.md`](RESULTS.md) (the exact hyper-parameters of the final checkpoints are in its first section).
 
 > Raw logs and per-query results (`logs/`, `training_logs/`, `results/`) are not in the repository: see [Reproducibility](../README.md#reproducibility) in the README.
 
