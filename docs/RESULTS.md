@@ -248,3 +248,5 @@ Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen 
 | e2e hybrid 2048 | SPLADE index + sparse index of the e2e encoder (166.4 non-zeros; 11.8 GB) | ~2.3 KB | ~20.3 GB | ×2.4 |
 | e2e hybrid 4096 | SPLADE index + sparse index of the e2e encoder (148.6 non-zeros; 10.6 GB) | ~2.2 KB | ~19.1 GB | ×2.2 |
 | e2e hybrid 8192 | SPLADE index + sparse index of the e2e encoder (104.6 non-zeros; 7.5 GB) | ~1.8 KB | ~16.0 GB | ×1.88 |
+
+`hybnoW` uses the same two indexes as the e2e hybrid (SPLADE + re-trained encoder), so it has the same size. Instead, `hyb1` and `ftsplade` need only the index of the re-trained encoder.
