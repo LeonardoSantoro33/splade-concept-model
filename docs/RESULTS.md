@@ -216,6 +216,9 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 | nDCG@10 | 0.3476 | 0.3534 | **+0.0058** | [+0.0009, +0.0107] | **0.022** |
 | R@1000 | 0.8402 | 0.8460 | +0.0057 | [−0.0014, +0.0128] | 0.12 |
 
+Bold means p < 0.05 without correction. After a Bonferroni correction over the 3 datasets (0.05 / 3 ≈ 0.017), FiQA is no longer significant, while NFCorpus R@1000 still is. With a correction over all 9 tests neither is.
+Overall, we can say the hybrid is _at the level of SPLADE out of domain_, not clearly better.
+
 **Summary: the best configurations.**
 
 | System | MS MARCO dev MRR@10 | BEIR mean nDCG@10 | Indexes |
