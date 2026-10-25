@@ -11,7 +11,7 @@ Chosen on validation (1,000 held-out training queries, SPLADE = 0.3639), never o
 
 **Frozen** (only W trained)
 
-| k | run (`models/<run>/best`) | init-std | lr | epochs | best val |
+| k | run | init-std | lr | epochs | best val |
 |---|---|---|---|---|---|
 | 256 | `frozen_k256_r2` | 0.02 | 1e-3 | 10 | 0.2870 |
 | 512 | `frozen_k512_r2_is0442_lr3e4_ep5` | 0.0442 | 3e-4 | 5 | 0.3173 |
@@ -22,7 +22,7 @@ Chosen on validation (1,000 held-out training queries, SPLADE = 0.3639), never o
 
 **Random W** (not trained: W is left at its initialisation, init-std = 1/√k)
 
-| k | run (`models/<run>/best`) | init-std | lr | epochs | best val |
+| k | run | init-std | lr | epochs | best val |
 |---|---|---|---|---|---|
 | 256 | `frozen_k256_rand` | 0.0625 | 1e-9 | 1 step | 0.2384 |
 | 512 | `frozen_k512_rand` | 0.0442 | 1e-9 | 1 step | 0.3043 |
