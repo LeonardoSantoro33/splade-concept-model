@@ -186,6 +186,10 @@ co-occurrence matrix), the baseline of the earlier SPLARE project. It is not par
 - Xiong et al., *Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval* (ANCE), ICLR 2021.
 - Bruch et al., *Efficient Inverted Indexes for Approximate Retrieval over Learned Sparse Representations* (Seismic), SIGIR 2024.
 
+## License
+
+MIT, see [LICENSE](LICENSE).
+
 ## Author
 
 Leonardo Santoro, Sapienza University of Rome.
