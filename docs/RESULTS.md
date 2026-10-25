@@ -190,6 +190,23 @@ the number of k values tested) but is below it on BEIR at every k. Index: 7.3–
 | Frozen hybrid | SPLADE index + W once (30,522 × k fp32, 31 MB to 1.0 GB) | 8.5–9.5 GB |
 | e2e hybrid, `hybnoW` | SPLADE index + sparse index of the re-trained encoder (102 / 115 / 145 / 166 / 149 / 105 non-zeros) | 15.8 / 16.7 / 18.8 / 20.3 / 19.1 / 16.0 GB |
 
+| System | Stored per document | Bytes/doc (raw) | Total (8.84M docs) | vs. SPLADE |
+|---|---|---|---|---|
+| SPLADE | original sparse index (~120 non-zeros) | ~1.0 KB | ~8.5 GB | ×1.00 |
+| frozen / e2e 256 | dense vector g(d), 256 fp16 numbers | 0.5 KB | ~4.5 GB | ×0.53 |
+| frozen / e2e 512 | dense vector, 512 fp16 numbers | 1.0 KB | ~9.1 GB | ×1.07 |
+| frozen / e2e 1024 | dense vector, 1024 fp16 numbers | 2.0 KB | ~18.1 GB | ×2.1 |
+| frozen / e2e 2048 | dense vector, 2048 fp16 numbers | 4.1 KB | ~36.2 GB | ×4.3 |
+| frozen / e2e 4096 | dense vector, 4096 fp16 numbers | 8.2 KB | ~72.4 GB | ×8.5 |
+| frozen / e2e 8192 | dense vector, 8192 fp16 numbers | 16.4 KB | ~144.9 GB | ×17.0 |
+| Frozen hybrid (every k) | SPLADE index only (+ W once: 30,522 × k fp32, 31 MB to 1.0 GB) | ~1.0 KB | ~8.5 GB | ×1.00 |
+| e2e hybrid 256 | SPLADE index + sparse index of the e2e encoder (~102 non-zeros; 7.3 GB) | ~1.8 KB | ~15.8 GB | ×1.86 |
+| e2e hybrid 512 | SPLADE index + sparse index of the e2e encoder (~115 non-zeros; 8.2 GB) | ~1.9 KB | ~16.7 GB | ×1.97 |
+| e2e hybrid 1024 | SPLADE index + sparse index of the e2e encoder (144.7 non-zeros; 10.3 GB) | ~2.1 KB | ~18.8 GB | ×2.2 |
+| e2e hybrid 2048 | SPLADE index + sparse index of the e2e encoder (166.4 non-zeros; 11.8 GB) | ~2.3 KB | ~20.3 GB | ×2.4 |
+| e2e hybrid 4096 | SPLADE index + sparse index of the e2e encoder (148.6 non-zeros; 10.6 GB) | ~2.2 KB | ~19.1 GB | ×2.2 |
+| e2e hybrid 8192 | SPLADE index + sparse index of the e2e encoder (104.6 non-zeros; 7.5 GB) | ~1.8 KB | ~16.0 GB | ×1.88 |
+
 A sparse entry takes about 8 bytes (int32 id + fp32 weight) plus a per-document pointer. No Concept-Model variant is smaller
 than SPLADE at equal quality, because SPLADE stores only ~120 values per document while the dense model stores all k.
 bf16 has the same size as fp16; int8 would halve it and was not tried.
