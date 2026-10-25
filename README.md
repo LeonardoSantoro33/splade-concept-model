@@ -154,12 +154,17 @@ The figures are produced with `python plots/concept_model_plots.py` (numbers are
 
 ## Reproducibility
 
-All raw training logs (115 runs) and evaluation outputs are archived in the
-[v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0)
-as `splade-concept-model-logs-results.tar.gz`. To restore them, extract the
-archive in the repository root:
+All raw training logs (115 runs) and evaluation outputs are archived as
+`splade-concept-model-logs-results.tar.gz` in the
+[v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0).
+They are not part of the repository, to keep the clone lightweight.
+
+To restore
+`logs/`, `training_logs/` and `results/`, download the archive and extract it
+in the repository root:
 
 ```
+curl -L -O https://github.com/LeonardoSantoro33/splade-concept-model/releases/download/v1.0/splade-concept-model-logs-results.tar.gz
 tar xzf splade-concept-model-logs-results.tar.gz
 ```
 
