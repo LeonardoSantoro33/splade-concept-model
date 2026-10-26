@@ -76,6 +76,8 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 
 ## Repository structure
 
+The only script outside `src/` is `plots/concept_model_plots.py`: it writes the figures next to itself, in `plots/figures/`.
+
 ```
 .
 ├── src/
