@@ -76,8 +76,6 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 
 ## Repository structure
 
-Scripts are kept flat in the repository root and numbered in execution order. Every command in the logs calls them by these names, so they are deliberately not moved into a `src/` package.
-
 ```
 .
 ├── src/
@@ -96,7 +94,7 @@ Scripts are kept flat in the repository root and numbered in execution order. Ev
 │   ├── 10_eval_beir.py                 # zero-shot BEIR (--splade, --ckpts, --ft-splade, --hybrid)
 │   ├── 11_eval_hybrid.py               # hybrids: λ chosen on validation, then dev / DL19 / DL20 (--variant two|single|now)
 │   ├── 12_significance.py              # paired per-query tests: bootstrap CI + t-test + permutation test
-│
+│   |
 │   ├── config.py                       # paths (env vars FM_DIR, WORK_DIR)
 │   ├── sparse_io.py  retrieval.py      # CSR / Seismic I/O; exact GPU search
 │   ├── splade_encoder.py               # SPLADE encoder (memory-efficient pooling)
@@ -146,9 +144,7 @@ All raw training logs (115 runs) and evaluation outputs are archived as
 [v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0).
 They are not part of the repository, to keep the clone lightweight.
 
-To restore
-`logs/`, `training_logs/` and `results/`, download the archive and extract it
-in the repository root:
+To restore `logs/`, `training_logs/` and `results/`, download the archive and extract it in the repository root:
 
 ```
 curl -L -O https://github.com/LeonardoSantoro33/splade-concept-model/releases/download/v1.0/splade-concept-model-logs-results.tar.gz
