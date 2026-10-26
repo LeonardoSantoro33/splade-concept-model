@@ -3,7 +3,7 @@
 #  GENERIC GPU job. Usage (from the repository directory):
 #     sbatch -J job_name jobs/gpu.sbatch  script.py  --script-arguments
 #  Example:
-#     sbatch -J baseline jobs/gpu.sbatch 04_baseline_splade.py --query-sets dev
+#     sbatch -J baseline jobs/gpu.sbatch src/04_baseline_splade.py --query-sets dev
 #  Output in logs/job_name_<id>.out (stdout) and logs/job_name_<id>.err (errors).
 #  The logs directory must exist:  mkdir -p logs
 # =====================================================================
@@ -24,7 +24,7 @@ cd "$SLURM_SUBMIT_DIR"
 set -e
 
 echo "Node: $(hostname) | Job: $SLURM_JOB_ID | Start: $(date)"
-echo "WORK_DIR=${WORK_DIR:-(config.py default)}"
+echo "WORK_DIR=${WORK_DIR:-(src/config.py default)}"
 nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv || true
 
 python -u "$@"

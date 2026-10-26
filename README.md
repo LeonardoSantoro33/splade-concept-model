@@ -32,7 +32,7 @@ Variants studied, for k = 256, 512, 1024, 2048, 4096, 8192:
 Evaluation: MS MARCO dev (6,980 queries, MRR@10), TREC DL 2019 / 2020 (nDCG@10), and zero-shot BEIR
 (NFCorpus, SciFact, FiQA; nDCG@10, mean of the three). Hyper-parameters and λ are chosen **only** on 1,000
 held-out training queries, never on dev or BEIR. Differences are tested per query with a paired bootstrap
-and permutation test (`12_significance.py`).
+and permutation test (`src/12_significance.py`).
 
 ## Main results
 
@@ -80,28 +80,29 @@ Scripts are kept flat in the repository root and numbered in execution order. Ev
 
 ```
 .
-├── 00_smoke_test.py                # unit tests + full pipeline on synthetic data (CPU, ~5 min)
-├── 01_prepare_data.py              # read the provided Seismic .bin files, map token ids to the BERT vocab, cache as CSR
-├── 02_download_msmarco.py          # MS MARCO queries / qrels / passages (+ TREC DL 2019/2020)
-├── 03_check_encoder.py             # which SPLADE checkpoint reproduces the provided vectors
-├── 04_baseline_splade.py           # SPLADE baseline, exact search, check vs. the provided ground truth
-├── 05_encode_train_queries.py      # SPLADE vectors of the MS MARCO training queries
-├── 06_train_concept_model.py       # training: --mode frozen | e2e, InfoNCE, hard negatives
-├── 07_mine_negatives.py            # hard-negative mining (SPLADE or a trained model)
-├── 08_eval_concept_model.py        # official evaluation (dense search), concept analysis, interventions
-├── 08b_eval_streaming.py           # same, streaming exact search for frozen models with k >= 2048 (does not fit in 40 GB)
-├── 08c_eval_e2e_streaming.py       # same for e2e models; re-encodes the corpus and saves the sparse shards used by 11
-├── 09_lce_splade.py                # legacy: Latent Concept Expansion baseline from the earlier SPLARE project
-├── 10_eval_beir.py                 # zero-shot BEIR (--splade, --ckpts, --ft-splade, --hybrid)
-├── 11_eval_hybrid.py               # hybrids: λ chosen on validation, then dev / DL19 / DL20 (--variant two|single|now)
-├── 12_significance.py              # paired per-query tests: bootstrap CI + t-test + permutation test
+├── src/
+│   ├── 00_smoke_test.py                # unit tests + full pipeline on synthetic data (CPU, ~5 min)
+│   ├── 01_prepare_data.py              # read the provided Seismic .bin files, map token ids to the BERT vocab, cache as CSR
+│   ├── 02_download_msmarco.py          # MS MARCO queries / qrels / passages (+ TREC DL 2019/2020)
+│   ├── 03_check_encoder.py             # which SPLADE checkpoint reproduces the provided vectors
+│   ├── 04_baseline_splade.py           # SPLADE baseline, exact search, check vs. the provided ground truth
+│   ├── 05_encode_train_queries.py      # SPLADE vectors of the MS MARCO training queries
+│   ├── 06_train_concept_model.py       # training: --mode frozen | e2e, InfoNCE, hard negatives
+│   ├── 07_mine_negatives.py            # hard-negative mining (SPLADE or a trained model)
+│   ├── 08_eval_concept_model.py        # official evaluation (dense search), concept analysis, interventions
+│   ├── 08b_eval_streaming.py           # same, streaming exact search for frozen models with k >= 2048 (does not fit in 40 GB)
+│   ├── 08c_eval_e2e_streaming.py       # same for e2e models; re-encodes the corpus and saves the sparse shards used by 11
+│   ├── 09_lce_splade.py                # legacy: Latent Concept Expansion baseline from the earlier SPLARE project
+│   ├── 10_eval_beir.py                 # zero-shot BEIR (--splade, --ckpts, --ft-splade, --hybrid)
+│   ├── 11_eval_hybrid.py               # hybrids: λ chosen on validation, then dev / DL19 / DL20 (--variant two|single|now)
+│   ├── 12_significance.py              # paired per-query tests: bootstrap CI + t-test + permutation test
 │
-├── config.py                       # paths (env vars FM_DIR, WORK_DIR)
-├── sparse_io.py  retrieval.py      # CSR / Seismic I/O; exact GPU search
-├── splade_encoder.py               # SPLADE encoder (memory-efficient pooling)
-├── concept_model.py                # W, InfoNCE, false-negative mask, checkpoints
-├── metrics.py  msmarco.py  pipeline.py  utils.py
-├── lce.py                          # used by the smoke test and by 09 (LCE of the earlier project)
+│   ├── config.py                       # paths (env vars FM_DIR, WORK_DIR)
+│   ├── sparse_io.py  retrieval.py      # CSR / Seismic I/O; exact GPU search
+│   ├── splade_encoder.py               # SPLADE encoder (memory-efficient pooling)
+│   ├── concept_model.py                # W, InfoNCE, false-negative mask, checkpoints
+│   ├── metrics.py  msmarco.py  pipeline.py  utils.py
+│   ├── lce.py                          # used by the smoke test and by 09 (LCE of the earlier project)
 │
 ├── jobs/                           # generic Slurm job scripts (gpu.sbatch, cpu.sbatch)
 ├── docs/GUIDE.md                   # step-by-step guide: how every result was produced
@@ -122,7 +123,7 @@ The scripts themselves write under `$WORK_DIR`. Checkpoints, embeddings and cach
 conda create -n splade python=3.11 && conda activate splade
 pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu118   # CUDA 11.8 build used on the cluster
 pip install -r requirements.txt            # or: pip install -r requirements_env.txt --extra-index-url https://download.pytorch.org/whl/cu118
-python -u 00_smoke_test.py                 # should end with: ALL TESTS PASSED (9)
+python -u src/00_smoke_test.py                 # should end with: ALL TESTS PASSED (9)
 ```
 
 The pipeline needs the pre-encoded MS MARCO SPLADE vectors in Seismic format (`documents.bin`, `queries.bin`, ...),
@@ -159,8 +160,8 @@ archive is only needed to inspect or verify individual runs.
 
 ## Legacy note on LCE
 
-`09_lce_splade.py` and `lce.py` implement Latent Concept Expansion (a training-free expansion with a corpus co-occurrence matrix), the baseline of the SPLARE project.
-They are not part of the results above. They are kept because `00_smoke_test.py` imports `lce.py` and runs `09_lce_splade.py`, and could always be useful in future work.
+`src/09_lce_splade.py` and `src/lce.py` implement Latent Concept Expansion (a training-free expansion with a corpus co-occurrence matrix), the baseline of the SPLARE project.
+They are not part of the results above. They are kept because `src/00_smoke_test.py` imports `src/lce.py` and runs `src/09_lce_splade.py`, and could always be useful in future work.
 
 ## Acknowledgements
 

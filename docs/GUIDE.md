@@ -8,14 +8,14 @@ are in [`RESULTS.md`](RESULTS.md) (the exact hyper-parameters of the final check
 
 | Stage | What it does | Script |
 |---|---|---|
-| Baseline | SPLADE with exact search over all of MS MARCO | `04_baseline_splade.py` |
-| Model | Concept Model `g(x) = W·SPLADE(x)`, score `g(q)·g(d)` | `concept_model.py` |
-| Training | **frozen** (only W) and **e2e** (W and BERT) variants, InfoNCE | `06_train_concept_model.py --mode frozen / e2e` |
-| Negatives | in-batch + hard negatives mined with SPLADE (exact search) | `07_mine_negatives.py --miner splade` |
+| Baseline | SPLADE with exact search over all of MS MARCO | `src/04_baseline_splade.py` |
+| Model | Concept Model `g(x) = W·SPLADE(x)`, score `g(q)·g(d)` | `src/concept_model.py` |
+| Training | **frozen** (only W) and **e2e** (W and BERT) variants, InfoNCE | `src/06_train_concept_model.py --mode frozen / e2e` |
+| Negatives | in-batch + hard negatives mined with SPLADE (exact search) | `src/07_mine_negatives.py --miner splade` |
 | Evaluation in domain | MS MARCO dev, TREC DL19, DL20 | `08`, `08b`, `08c` |
-| Evaluation out of domain | zero-shot BEIR (NFCorpus, SciFact, FiQA) | `10_eval_beir.py` |
-| Hybrids | mix with SPLADE, λ chosen on validation | `11_eval_hybrid.py` |
-| Statistics | paired per-query tests | `12_significance.py` |
+| Evaluation out of domain | zero-shot BEIR (NFCorpus, SciFact, FiQA) | `src/10_eval_beir.py` |
+| Hybrids | mix with SPLADE, λ chosen on validation | `src/11_eval_hybrid.py` |
+| Statistics | paired per-query tests | `src/12_significance.py` |
 
 ---
 
@@ -30,7 +30,7 @@ pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt   # or requirements_env.txt for the exact environment
 ```
 
-**Data directories.** Both paths are read from environment variables (defaults in `config.py`). Put them in
+**Data directories.** Both paths are read from environment variables (defaults in `src/config.py`). Put them in
 `~/.bashrc` so they are always set:
 
 - `FM_DIR`: pre-encoded SPLADE vectors of MS MARCO in Seismic format (`documents.bin`, `queries.bin`, `doc_ids.npy`,
@@ -71,16 +71,16 @@ Hybrid validation curves are in `*_validation.json`. Significance tests in `resu
 ### 1.1 Smoke test on synthetic data (5 minutes, CPU)
 
 ```bash
-srun -p long -c 4 --mem=16G -t 00:30:00 python -u 00_smoke_test.py
+srun -p long -c 4 --mem=16G -t 00:30:00 python -u src/00_smoke_test.py
 ```
 
 Must end with `ALL TESTS PASSED (9)`. It runs every stage on a tiny synthetic corpus, so bugs show up in minutes.
-(It imports `lce.py`, which is why that legacy module stays in the repository.)
+(It imports `src/lce.py`, which is why that legacy module stays in the repository.)
 
 ### 1.2 Prepare the provided data (~15 min, CPU)
 
 ```bash
-sbatch -J prep jobs/cpu.sbatch 01_prepare_data.py
+sbatch -J prep jobs/cpu.sbatch src/01_prepare_data.py
 ```
 
 Converts the token ids of the provided vectors (28,679-entry mapping) into the BERT space (30,522) and caches the
@@ -89,13 +89,13 @@ Converts the token ids of the provided vectors (28,679-entry mapping) into the B
 ### 1.3 Download MS MARCO and TREC DL (~10 min, network, login node is fine)
 
 ```bash
-python -u 02_download_msmarco.py --trec-dl
+python -u src/02_download_msmarco.py --trec-dl
 ```
 
 ### 1.4 Which SPLADE model made the provided vectors? (~5 min, GPU)
 
 ```bash
-srun -p long -c 4 --mem=32G --gpus 1 -t 00:30:00 python -u 03_check_encoder.py
+srun -p long -c 4 --mem=32G --gpus 1 -t 00:30:00 python -u src/03_check_encoder.py
 ```
 
 Must print `GOOD: same model`. We obtained cosine 1.0000 for `naver/splade-cocondenser-ensembledistil`
@@ -105,7 +105,7 @@ and used by scripts 04 and 05.
 ### 1.5 SPLADE baseline (~10 min, GPU)
 
 ```bash
-sbatch -J baseline jobs/gpu.sbatch 04_baseline_splade.py --query-sets dev dl19 dl20
+sbatch -J baseline jobs/gpu.sbatch src/04_baseline_splade.py --query-sets dev dl19 dl20
 ```
 
 Expected on dev: MRR@10 = 0.3828, nDCG@10 = 0.4489, R@1000 = 0.9831, and
@@ -114,7 +114,7 @@ Expected on dev: MRR@10 = 0.3828, nDCG@10 = 0.4489, R@1000 = 0.9831, and
 ### 1.6 Encode the training queries (~10 min, GPU)
 
 ```bash
-sbatch -J enc_train jobs/gpu.sbatch 05_encode_train_queries.py
+sbatch -J enc_train jobs/gpu.sbatch src/05_encode_train_queries.py
 ```
 
 Encodes the 503k training queries that have a qrel. 1,000 of them are held out for validation (seed 42) and never used
@@ -128,9 +128,9 @@ Round 1 uses in-batch negatives only, round 2 adds 7 hard negatives per query (r
 are discarded as possible false negatives):
 
 ```bash
-sbatch -J mine_splade jobs/gpu.sbatch 07_mine_negatives.py --miner splade --out splade     # ~1 h
+sbatch -J mine_splade jobs/gpu.sbatch src/07_mine_negatives.py --miner splade --out splade     # ~1 h
 
-sbatch -J cm_r2_k1024_lr3e5 jobs/gpu.sbatch 06_train_concept_model.py --mode frozen --k 1024 \
+sbatch -J cm_r2_k1024_lr3e5 jobs/gpu.sbatch src/06_train_concept_model.py --mode frozen --k 1024 \
        --run-name frozen_k1024_r2_lr3e5 --negatives splade --n-hard 7 --neg-rank-min 3 \
        --lr 3e-5 --epochs 2 --val-every 100
 ```
@@ -148,7 +148,7 @@ The **random-W baseline** is the same architecture with W left at its initialisa
 running the training for one step with a negligible learning rate. The checkpoints are named `frozen_k<k>_rand`:
 
 ```bash
-sbatch -J cm_rand_k1024 jobs/gpu.sbatch 06_train_concept_model.py --mode frozen --k 1024 --run-name frozen_k1024_rand \
+sbatch -J cm_rand_k1024 jobs/gpu.sbatch src/06_train_concept_model.py --mode frozen --k 1024 --run-name frozen_k1024_rand \
        --negatives splade --n-hard 7 --neg-rank-min 3 --init-std 0.03125 --lr 1e-9 --max-steps 1
 ```
 
@@ -157,12 +157,12 @@ The final checkpoint of each k and its hyper-parameters are listed in [`RESULTS.
 ### Official evaluation (dev, DL19, DL20)
 
 ```bash
-sbatch -J eval_k1024 jobs/gpu.sbatch 08_eval_concept_model.py --ckpt frozen_k1024_r2_lr3e5 \
+sbatch -J eval_k1024 jobs/gpu.sbatch src/08_eval_concept_model.py --ckpt frozen_k1024_r2_lr3e5 \
        --query-sets dev dl19 dl20 --explain 5
 ```
 
 `08` builds dense document vectors, which fit in 40 GB up to k = 1024. For larger k use the streaming version
-(`08b_eval_streaming.py`, with `--ckpt` and `--query-sets`; no `--explain`), which uses `g(q)·g(d) = (Wᵀg(q))·SPLADE(d)` and never builds the dense matrix.
+(`src/08b_eval_streaming.py`, with `--ckpt` and `--query-sets`; no `--explain`), which uses `g(q)·g(d) = (Wᵀg(q))·SPLADE(d)` and never builds the dense matrix.
 Streaming gives the same numbers up to fp16 rounding (differences ≤ 0.0006 on k = 1024).
 `--explain N` also writes `concepts_<name>.tsv` (top tokens of each concept) and N interventions.
 
@@ -175,7 +175,7 @@ one epoch (~15,700 steps, ~2 h 40 on an A100), gradient checkpointing to avoid o
 
 ```bash
 sbatch --export=ALL,PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True --time=05:00:00 \
-       -J cm_e2e_k1024 jobs/gpu.sbatch 06_train_concept_model.py --mode e2e --k 1024 \
+       -J cm_e2e_k1024 jobs/gpu.sbatch src/06_train_concept_model.py --mode e2e --k 1024 \
        --run-name e2e_k1024_r2_is03125_lr3e5_bb5e6_b32_ep1 --negatives splade --n-hard 7 --neg-rank-min 3 \
        --init-std 0.03125 --lr 3e-5 --lr-backbone 5e-6 --batch-size 32 --epochs 1 \
        --val-every 2000 --val-queries 1000 --grad-checkpointing
@@ -194,7 +194,7 @@ The re-trained encoder changes the SPLADE vectors of all 8.84M passages (~1 h). 
 
 ```bash
 sbatch --export=ALL,PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True --time=10:00:00 -J eval_e2e_stream_k4096 \
-       jobs/gpu.sbatch 08c_eval_e2e_streaming.py --ckpt e2e_k4096_r2_is0156_lr3e5_bb1e6_b32_ep1 --query-sets dev dl19 dl20
+       jobs/gpu.sbatch src/08c_eval_e2e_streaming.py --ckpt e2e_k4096_r2_is0156_lr3e5_bb1e6_b32_ep1 --query-sets dev dl19 dl20
 ```
 
 The job resumes from the saved chunks if it is interrupted. If the GPU runs out of memory, use `--batch-size 16` or
@@ -205,9 +205,9 @@ The job resumes from the saved chunks if it is interrupted. If the GPU runs out 
 ## 4. Out of domain: BEIR (zero-shot)
 
 ```bash
-python -u 10_eval_beir.py --datasets nfcorpus scifact fiqa --download-only
-sbatch --time=01:00:00 -J beir_splade jobs/gpu.sbatch 10_eval_beir.py --datasets nfcorpus scifact fiqa --splade
-sbatch --time=01:00:00 -J beir_frozen_k1024 jobs/gpu.sbatch 10_eval_beir.py --datasets nfcorpus scifact fiqa \
+python -u src/10_eval_beir.py --datasets nfcorpus scifact fiqa --download-only
+sbatch --time=01:00:00 -J beir_splade jobs/gpu.sbatch src/10_eval_beir.py --datasets nfcorpus scifact fiqa --splade
+sbatch --time=01:00:00 -J beir_frozen_k1024 jobs/gpu.sbatch src/10_eval_beir.py --datasets nfcorpus scifact fiqa \
        --ckpts frozen_k1024_r2_lr3e5
 ```
 
@@ -218,7 +218,7 @@ re-trained encoder of an e2e checkpoint as a plain SPLADE (W discarded).
 
 ## 5. Hybrids
 
-Score `(1-λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)`. `11_eval_hybrid.py` runs in a single job:
+Score `(1-λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)`. `src/11_eval_hybrid.py` runs in a single job:
 
 1. Exact search on the 1,000 validation queries for 21 values of λ (0, 0.05, …, 1) → λ\* = the best MRR@10
 2. Dev, DL19 and DL20 with λ\*, plus the checks λ = 0 (must reproduce SPLADE, 0.3828) and λ = 1 (must reproduce the
@@ -226,10 +226,10 @@ Score `(1-λ)·SPLADE(q)·SPLADE(d) + λ·g(q)·g(d)`. `11_eval_hybrid.py` runs 
 
 ```bash
 # frozen: only SPLADE's index and W are needed
-sbatch -J hyb_frozen_k256 jobs/gpu.sbatch 11_eval_hybrid.py --ckpt frozen_k256_r2 --query-sets dev dl19 dl20
+sbatch -J hyb_frozen_k256 jobs/gpu.sbatch src/11_eval_hybrid.py --ckpt frozen_k256_r2 --query-sets dev dl19 dl20
 
 # e2e: run 08c first (it saves the sparse shards of the re-trained encoder), then the hybrid
-sbatch -J hyb_e2e_k256 jobs/gpu.sbatch 11_eval_hybrid.py --ckpt e2e_k256_r2_is0625_lr1e4_bb1e5_b32_ep1 --query-sets dev dl19 dl20
+sbatch -J hyb_e2e_k256 jobs/gpu.sbatch src/11_eval_hybrid.py --ckpt e2e_k256_r2_is0625_lr1e4_bb1e5_b32_ep1 --query-sets dev dl19 dl20
 ```
 
 The `--variant` option (e2e checkpoints only) selects what is mixed:
@@ -246,7 +246,7 @@ The `--variant` option (e2e checkpoints only) selects what is mixed:
 Hybrids on BEIR use the λ\* found on MS MARCO validation (nothing is chosen on BEIR):
 
 ```bash
-sbatch --time=01:00:00 -J beir_hyb_k256 jobs/gpu.sbatch 10_eval_beir.py --datasets nfcorpus scifact fiqa \
+sbatch --time=01:00:00 -J beir_hyb_k256 jobs/gpu.sbatch src/10_eval_beir.py --datasets nfcorpus scifact fiqa \
        --hybrid e2e_k256_r2_is0625_lr1e4_bb1e5_b32_ep1:now:0.40
 ```
 
@@ -255,7 +255,7 @@ sbatch --time=01:00:00 -J beir_hyb_k256 jobs/gpu.sbatch 10_eval_beir.py --datase
 ## 6. Significance tests
 
 ```bash
-sbatch --time=00:15:00 -J sig_hybnoW256 jobs/cpu.sbatch 12_significance.py \
+sbatch --time=00:15:00 -J sig_hybnoW256 jobs/cpu.sbatch src/12_significance.py \
        --a splade_baseline_dev --b hybnoW_e2e_k256_r2_is0625_lr1e4_bb1e5_b32_ep1_best_lam0.40_dev
 ```
 

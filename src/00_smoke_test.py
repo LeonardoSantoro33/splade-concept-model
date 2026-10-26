@@ -4,7 +4,7 @@
 Run it first on the cluster: if it ends with "ALL TESTS PASSED", the environment (lce) and the
 code work. It runs on CPU in a few minutes and writes only to a temporary directory.
 
-    srun -p long -c 4 --mem=16G -t 00:30:00 python -u 00_smoke_test.py
+    srun -p long -c 4 --mem=16G -t 00:30:00 python -u src/00_smoke_test.py
 
 Part 1 - unit tests:
   Seismic format (write/read), CSR, exact sparse and dense search vs brute force,
