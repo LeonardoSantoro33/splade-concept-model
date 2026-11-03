@@ -23,6 +23,6 @@ set -e
 echo "Node: $(hostname) | Job: $SLURM_JOB_ID | Start: $(date)"
 echo "WORK_DIR=${WORK_DIR:-(src/config.py default)}"
 
-python -u "$@"
+python -u src/"$1" "${@:2}"
 
 echo "End: $(date)"

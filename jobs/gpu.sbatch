@@ -27,6 +27,6 @@ echo "Node: $(hostname) | Job: $SLURM_JOB_ID | Start: $(date)"
 echo "WORK_DIR=${WORK_DIR:-(src/config.py default)}"
 nvidia-smi --query-gpu=name,memory.total,memory.used --format=csv || true
 
-python -u "$@"
+python -u src/"$1" "${@:2}"
 
 echo "End: $(date)"
