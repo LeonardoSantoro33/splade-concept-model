@@ -107,13 +107,12 @@ The only script outside `src/` is `plots/concept_model_plots.py`: it writes the 
 ├── jobs/                           # generic Slurm job scripts (gpu.sbatch, cpu.sbatch)
 ├── docs/GUIDE.md                   # step-by-step guide: how every result was produced
 ├── docs/RESULTS.md                 # all result tables, final checkpoints and hyper-parameters
-├── results/ logs/ training_logs/   # not tracked: download them from the v1.0 release (see Reproducibility)
 ├── plots/                          # concept_model_plots.py and the figures (plots/figures/)
 ├── requirements.txt                # direct dependencies
 └── requirements_env.txt            # exact versions of the environment used for all experiments
 ```
 
-`results/`, `logs/` and `training_logs/` are not in the repository: they are archived in the [v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0).
+Raw logs and per-query results are **not** distributed with the repository.
 
 The scripts themselves write under `$WORK_DIR`. Checkpoints, embeddings and caches (about 260 GB) are **not** distributed.
 
@@ -138,23 +137,6 @@ export WORK_DIR=/path/to/large/scratch/splade_concept   # caches, checkpoints, r
 
 Every long step is a Slurm job. The complete sequence, with the exact commands, is in [`docs/GUIDE.md`](docs/GUIDE.md).
 The figures are produced with `python plots/concept_model_plots.py` (numbers are written inside the script).
-
-## Reproducibility
-
-All raw training logs (115 runs) and evaluation outputs are archived as
-`splade-concept-model-logs-results.tar.gz` in the
-[v1.0 release](https://github.com/LeonardoSantoro33/splade-concept-model/releases/tag/v1.0).
-They are not part of the repository, to keep the clone lightweight.
-
-To restore `logs/`, `training_logs/` and `results/`, download the archive and extract it in the repository root:
-
-```
-curl -L -O https://github.com/LeonardoSantoro33/splade-concept-model/releases/download/v1.0/splade-concept-model-logs-results.tar.gz
-tar xzf splade-concept-model-logs-results.tar.gz
-```
-
-Final numbers are summarised in [`docs/RESULTS.md`](docs/RESULTS.md); the
-archive is only needed to inspect or verify individual runs.
 
 ## Legacy note on LCE
 
