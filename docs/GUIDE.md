@@ -337,22 +337,3 @@ python plots/concept_model_plots.py       # writes plots/figures/fig1…fig4 as 
 ```
 
 The numbers are in the dictionaries at the top of the script. Edit manually them there if a result changes.
-
----
-
-## 8. Design choices to report
-
-- **Exact search instead of ANN**: every number is an upper bound for any approximate index, with no approximation error.
-- **Clean validation**: 1,000 training queries held out; checkpoints, hyper-parameters and λ are chosen on them
-  (re-ranking SPLADE's top 100 during training, full-corpus search for λ), never on dev or BEIR.
-- **False negatives**: the other known positives of the same query are masked out of the negatives in the loss, and the top 3 mining
-  candidates are discarded (`--neg-rank-min 3`).
-- **SPLADE pooling**: `log(1 + ReLU(max_i logits_i))` instead of `max_i log(1 + ReLU(logits_i))`. Same result, but less memory: log/ReLU run after the max.
-
----
-
-## 9. Troubleshooting
-
-| Message | What to do |
-|---|---|
-| `CUDA out of memory` | lower `--batch-size` (training) or `--q-batch` (search); use `--grad-checkpointing` and `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True`; for k ≥ 2048 use the streaming evaluation (`08b` / `08c`) |
