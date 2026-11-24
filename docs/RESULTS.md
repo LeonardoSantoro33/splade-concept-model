@@ -233,14 +233,14 @@ Overall, we can say the hybrid is _at least at the level of SPLADE out of domain
 
 **Summary: the best configurations** (% of SPLADE)
 
-| System | MS MARCO dev MRR@10 | BEIR mean nDCG@10 | Indexes |
+| System | MS MARCO dev MRR@10 | BEIR mean nDCG@10 (NFCorpus, SciFact, FiQA, NQ) | Indexes |
 |---|---|---|---|
-| Original SPLADE | 0.3828 | 0.4662 | 1 (8.5 GB) |
-| `hybnoW` **k = 256** (SPLADE + re-trained encoder, λ = 0.40) | **0.3920** (102.4%)<br>p = 0.0001 | 0.4676 (100.3%) | 2 (15.8 GB) |
-| `hyb` **k = 4096** (SPLADE + Concept Model, λ = 0.30) | **0.3880** (101.4%)<br>p = 0.0001 | 0.4661 (100.0%) | 2 (19.1 GB) |
-| `hyb` **k = 256** (SPLADE + Concept Model, λ = 0.20) | **0.3901** (101.9%)<br>p = 0.0001 | 0.4646 (99.7%) | 2 (15.8 GB) |
+| Original SPLADE | 0.3828 | 0.4844 | 1 (8.5 GB) |
+| `hybnoW` **k = 256** (SPLADE + re-trained encoder, λ = 0.40) | **0.3920** (102.4%)<br>p ≤ 0.0001 | **0.4872** (100.6%) | 2 (15.8 GB) |
+| `hyb` **k = 4096** (SPLADE + Concept Model, λ = 0.30) | **0.3880** (101.4%)<br>p ≤ 0.0001 | 0.4853 (100.2%) | 2 (19.1 GB) |
+| `hyb` **k = 256** (SPLADE + Concept Model, λ = 0.20) | **0.3901** (101.9%)<br>p ≤ 0.0001 | 0.4838 (99.9%) | 2 (15.8 GB) |
 
-Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen only on the MS MARCO validation set) beats SPLADE in domain (+2.4% MRR@10, p = 0.0001) and stays at the level of SPLADE out of domain on the 3 BEIR datasets tested (mean nDCG@10 100.3% of SPLADE, not significant). The price is a second sparse index (+86% of space: 15.8 GB against 8.5 GB), as illustrated in the following section.
+Mixing SPLADE with the re-trained encoder (`hybnoW`, k = 256, λ = 0.40, chosen only on the MS MARCO validation set) beats SPLADE in domain (+2.4% MRR@10, p ≤ 0.0001) and is at least at the level of SPLADE out of domain on the 4 BEIR datasets tested (mean nDCG@10 100.6% of SPLADE: on par on NFCorpus, SciFact and FiQA, significantly better on NQ after Bonferroni correction). The price is a second sparse index (+86% of space: 15.8 GB against 8.5 GB), as illustrated in the following section.
 
 ## 6. Space (8.84M passages, raw sizes)
 
