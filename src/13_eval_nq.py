@@ -49,6 +49,7 @@ import argparse
 import csv
 import importlib.util
 import json
+import re
 import zipfile
 from pathlib import Path
 
@@ -216,9 +217,20 @@ def load_texts(nq_dir):
                 r = d2r.get(str(o["_id"]))
                 if r is not None:
                     doc_texts[r] = f"{o.get('title', '') or ''} {o.get('text', '') or ''}".strip()
-    missing = sum(t is None for t in doc_texts)
+    missing = [r for r, t in enumerate(doc_texts) if t is None]
     if missing:
-        raise SystemExit(f"[ERROR] {missing:,} of {len(doc_texts):,} documents of doc_ids.npy have no text in corpus.jsonl")
+        # The professor's doc_ids.npy has some SPURIOUS rows: pieces of text instead of 'docNNN' (a passage with a
+        # newline was split while parsing the corpus). Their vectors exist, so the row is kept and, as text, we use
+        # the fragment itself (what is in the id column). Any other missing text is an error.
+        real = [r for r in missing if re.match(r"^doc\d+$", str(d_ids[r]))]
+        if real:
+            raise SystemExit(f"[ERROR] {len(real):,} documents with a real id (e.g. {str(d_ids[real[0]])}) have no text "
+                             f"in corpus.jsonl: check the BEIR corpus")
+        for r in missing:
+            doc_texts[r] = str(d_ids[r])
+        log(f"WARNING: {len(missing)} rows of the professor's doc_ids.npy are not ids but text fragments "
+            f"(e.g. {[str(d_ids[r])[:20] for r in missing[:3]]}): their text = the fragment itself "
+            f"(they are not in the qrels, effect on the metrics is negligible)")
     del d2r
     q_ids = np.load(nq_dir / "queries_ids.npy", allow_pickle=True).tolist()
     all_q = {}
