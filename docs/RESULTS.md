@@ -2,7 +2,7 @@
 
 All numbers come from the per-query files in `results/` and the job logs in `logs/`. Percentages are relative to SPLADE
 in the same column. Test sets: MS MARCO dev (6,980 queries), TREC DL19 (43) and DL20 (54), BEIR (NFCorpus 323,
-SciFact 300, FiQA 648 queries). Differences below about 0.02 on DL19 / DL20 are noise.
+SciFact 300, FiQA 648 queries, NQ 3,452 queries). Differences below about 0.02 on DL19 / DL20 are noise.
 
 ## 1. Final checkpoints
 
@@ -88,41 +88,45 @@ DL20 nDCG@10 0.7203, R@1000 0.8989.
 |---|---|---|---|---|---|---|
 | validation MRR@10 | +0.031 | +0.028 | +0.0175 | +0.016 | +0.008 | +0.010 |
 | dev MRR@10 | +0.064 | +0.034 | +0.028 | +0.012 | +0.011 | −0.004 |
-| BEIR mean nDCG@10 | +0.002 | +0.001 | 0.000 | −0.008 | −0.002 | −0.006 |
-| BEIR mean R@100 | +0.014 | +0.019 | +0.012 | −0.002 | −0.002 | −0.005 |
+| BEIR mean nDCG@10 without NQ (3 datasets) | +0.002 | +0.001 | 0.000 | −0.008 | −0.002 | −0.006 |
+| BEIR mean nDCG@10 with NQ (4 datasets) | +0.023 | +0.017 | 0.002 | −0.004 | +0.001 | −0.005 |
 
-The gain falls with k, stays in domain, and turns negative at 8192, where validation had suggested the opposite.
+
+The gain falls with k, stays in domain (except for k = 256, 512 thanks to NQ), and turns negative at 8192, where validation had suggested the opposite.
 
 ## 3. Out of domain: BEIR (nDCG@10, zero-shot)
 
-SPLADE: NFCorpus 0.3486, SciFact 0.7024, FiQA 0.3476, **mean 0.4662** (R@100 mean 0.6160).
+SPLADE: NFCorpus 0.3486, SciFact 0.7024, FiQA 0.3476, NQ 0.5391, **mean 0.4844**.
 
-| System | k | NFCorpus | SciFact | FiQA | Mean (% of SPLADE) |
-|---|---|---|---|---|---|
-| Random W | 256 | 0.2516 | 0.4941 | 0.1895 | 0.3117 (66.9%) |
-| Frozen | 256 | 0.2605 | 0.5252 | 0.2211 | 0.3356 (72.0%) |
-| e2e | 256 | 0.2777 | 0.5057 | 0.2283 | 0.3372 (72.3%) |
-| Random W | 512 | 0.3039 | 0.5997 | 0.2752 | 0.3929 (84.3%) |
-| Frozen | 512 | 0.3076 | 0.6235 | 0.2736 | 0.4016 (86.1%) |
-| e2e | 512 | 0.3068 | 0.6172 | 0.2840 | 0.4027 (86.4%) |
-| Random W | 1024 | 0.3264 | 0.6617 | 0.3019 | 0.4300 (92.2%) |
-| Frozen | 1024 | 0.3254 | 0.6660 | 0.2968 | 0.4294 (92.1%) |
-| e2e | 1024 | 0.3251 | 0.6525 | 0.3098 | 0.4291 (92.0%) |
-| e2e, fixed W | 1024 | 0.3206 | 0.6553 | 0.3086 | 0.4282 (91.8%) |
-| Random W | 2048 | 0.3310 | 0.6657 | 0.3143 | 0.4370 (93.7%) |
-| Frozen | 2048 | 0.3330 | 0.6744 | 0.3219 | 0.4431 (95.0%) |
-| e2e | 2048 | 0.3281 | 0.6533 | 0.3228 | 0.4347 (93.3%) |
-| Random W | 4096 | 0.3469 | 0.6910 | 0.3425 | 0.4601 (98.7%) |
-| Frozen | 4096 | 0.3464 | 0.6920 | 0.3411 | 0.4598 (98.6%) |
-| e2e | 4096 | 0.3449 | 0.6855 | 0.3436 | 0.4580 (98.2%) |
-| Random W | 8192 | 0.3458 | 0.6936 | 0.3405 | 0.4600 (98.7%) |
-| Frozen | 8192 | 0.3480 | 0.6922 | 0.3412 | 0.4605 (98.8%) |
-| e2e | 8192 | 0.3453 | 0.6813 | 0.3358 | 0.4541 (97.4%) |
+| System | k | NFCorpus | SciFact | FiQA | NQ | Mean (% of SPLADE) |
+|---|---|---|---|---|---|---|
+| Random W | 256 | 0.2516 | 0.4941 | 0.1895 | 0.2658 | 0.3003 (62.0%) |
+| Frozen | 256 | 0.2605 | 0.5252 | 0.2211 | 0.3334 | 0.3351 (69.2%) |
+| e2e | 256 | 0.2777 | 0.5057 | 0.2283 | 0.4221 | 0.3585 (74.0%) |
+| Random W | 512 | 0.3039 | 0.5997 | 0.2752 | 0.3954 | 0.3935 (81.2%) |
+| Frozen | 512 | 0.3076 | 0.6235 | 0.2736 | 0.4026 | 0.4018 (82.9%) |
+| e2e | 512 | 0.3068 | 0.6172 | 0.2840 | 0.4671 | 0.4188 (86.4%) |
+| Random W | 1024 | 0.3264 | 0.6617 | 0.3019 | 0.4618 | 0.4380 (90.4%) |
+| Frozen | 1024 | 0.3254 | 0.6660 | 0.2968 | 0.4801 | 0.4421 (91.3%) |
+| e2e | 1024 | 0.3251 | 0.6525 | 0.3098 | 0.4894 | 0.4442 (91.7%) |
+| e2e, fixed W | 1024 | 0.3206 | 0.6553 | 0.3086 | 0.4887 | 0.4433 (91.5%) |
+| Random W | 2048 | 0.3310 | 0.6657 | 0.3143 | 0.5009 | 0.4530 (93.5%) |
+| Frozen | 2048 | 0.3330 | 0.6744 | 0.3219 | 0.5010 | 0.4576 (94.5%) |
+| e2e | 2048 | 0.3281 | 0.6533 | 0.3228 | 0.5103 | 0.4536 (93.6%) |
+| Random W | 4096 | 0.3469 | 0.6910 | 0.3425 | 0.5183 | 0.4747 (98.0%) |
+| Frozen | 4096 | 0.3464 | 0.6920 | 0.3411 | 0.5164 | 0.4740 (97.8%) |
+| e2e | 4096 | 0.3449 | 0.6855 | 0.3436 | 0.5251 | 0.4748 (98.0%) |
+| Random W | 8192 | 0.3458 | 0.6936 | 0.3405 | 0.5277 | 0.4769 (98.4%) |
+| Frozen | 8192 | 0.3480 | 0.6922 | 0.3412 | 0.5210 | 0.4756 (98.2%) |
+| e2e | 8192 | 0.3453 | 0.6813 | 0.3358 | 0.5192 | 0.4704 (97.1%) |
 
-For random W and frozen, the share of SPLADE kept is the same in and out of domain (within 1–2 points at every k). For
-e2e it is much lower out of domain at small k (89.4% in domain vs 72.3% on BEIR at k = 256): the gain is a specialisation
-to MS MARCO. SciFact (scientific claims) is the most penalised and FiQA (natural-language questions, close to MS MARCO) the most favoured.
-The difference between Frozen and Random W follows the same pattern in and out of domain: training W helps clearly at k = 256, a little at k = 512, and from k = 1024 upwards the learned W is almost indistinguishable from a random one.
+For random W and frozen, the share of SPLADE kept is about the same in and out of domain from k = 1024 on (within 2 points);
+at small k it is somewhat lower out of domain (frozen: 72.9% vs 69.2% at k = 256, 85.1% vs 82.9% at k = 512).
+For e2e it is much lower out of domain at small k (89.4% in domain vs 74.0% on BEIR at k = 256): most of the gain is a
+specialisation to MS MARCO. Only NQ keeps part of it: at k = 256 and 512 e2e is clearly ahead of the frozen model on NQ
+(0.4221 vs 0.3334, 0.4671 vs 0.4026), while on NFCorpus, SciFact and FiQA the two are equal, so the four-dataset mean is
++0.023 and +0.017 in favour of e2e. From k = 1024 on e2e and frozen are at the same level out of domain.
+The difference between Frozen and Random W follows the same pattern in and out of domain: training W helps clearly at k = 256 (+0.035 on the mean), a little at k = 512 (+0.008), and from k = 1024 upwards the learned W is almost indistinguishable from a random one.
 
 ## 4. Hybrids with SPLADE
 
@@ -152,18 +156,18 @@ Variants of the hybrid, from the original one to the re-trained encoder alone. `
 
 SPLADE alone: 0.3828.
 
-**Hybrids, out of domain: BEIR mean nDCG@10 (% of SPLADE)**:
+**Hybrids, out of domain: BEIR mean nDCG@10 over NFCorpus, SciFact, FiQA and NQ (% of SPLADE)**:
 
 | k | Frozen hybrid | λ\* | e2e hybrid (`hyb`) | λ\* | `hybnoW` | λ\* | `ftsplade` |
 |---|---|---|---|---|---|---|---|
-| 256 | 0.4659 (99.9%) | 0.05 | 0.4646 (99.7%) | 0.20 | **0.4676 (100.3%)** | 0.40 | 0.4248 (91.1%) |
-| 512 | 0.4642 (99.6%) | 0.15 | 0.4608 (98.8%) | 0.40 | 0.4646 (99.7%) | 0.45 | 0.4419 (94.8%) |
-| 1024 | 0.4604 (98.8%) | 0.45 | 0.4510 (96.7%) | 0.75 | 0.4654 (99.8%) | 0.50 | 0.4513 (96.8%) |
-| 2048 | 0.4662 (100.0%) | 0.00 | 0.4630 (99.3%) | 0.40 | 0.4555 (97.7%) | 0.90 | 0.4517 (96.9%) |
-| 4096 | 0.4660 (100.0%) | 0.10 | 0.4661 (100.0%) | 0.30 | 0.4617 (99.0%) | 0.90 | 0.4598 (98.6%) |
-| 8192 | 0.4617 (99.0%) | 0.85 | 0.4541 (97.4%) | 1.00 | 0.4646 (99.7%) | 0.40 | 0.4606 (98.8%) |
+| 256 | 0.4842 (99.9%) | 0.05 | 0.4838 (99.9%) | 0.20 | **0.4872 (100.6%)** | 0.40 | 0.4463 (92.1%) |
+| 512 | 0.4820 (99.5%) | 0.15 | 0.4804 (99.2%) | 0.40 | 0.4846 (100.0%) | 0.45 | 0.4640 (95.8%) |
+| 1024 | 0.4795 (99.0%) | 0.45 | 0.4693 (96.9%) | 0.75 | 0.4859 (100.3%) | 0.50 | 0.4722 (97.5%) |
+| 2048 | 0.4844 (100.0%) | 0.00 | 0.4830 (99.7%) | 0.40 | 0.4773 (98.5%) | 0.90 | 0.4729 (97.6%) |
+| 4096 | 0.4840 (99.9%) | 0.10 | 0.4853 (100.2%) | 0.30 | 0.4820 (99.5%) | 0.90 | 0.4804 (99.2%) |
+| 8192 | 0.4780 (98.7%) | 0.85 | 0.4704 (97.1%) | 1.00 | 0.4832 (99.7%) | 0.40 | 0.4804 (99.2%) |
 
-SPLADE alone: 0.4662.
+SPLADE alone: 0.4844.
 
 ## 5. Significance tests
 
@@ -190,7 +194,7 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 | nDCG@10 | 0.4489 | 0.4577 | **+0.0089** | [+0.0063, +0.0114] | 0.0001 |
 | R@1000 | 0.9831 | 0.9841 | +0.0010 | [−0.0001, +0.0022] | 0.10 |
 
-**The same system out of domain**, per BEIR dataset. No consistent gain: only FiQA improves (nDCG@10 and MRR@10), NFCorpus is slightly worse in precision but better in recall, and SciFact does not change.
+**The same system out of domain**, per BEIR dataset. Only FiQA and NQ improve (nDCG@10 and MRR@10); NFCorpus is slightly worse in precision but better in recall, and SciFact does not change.
 
 *NFCorpus (323 queries)*
 
@@ -216,8 +220,16 @@ The hybrid without W is never worse than the one with W: the Concept Model helps
 | nDCG@10 | 0.3476 | 0.3534 | **+0.0058** | [+0.0009, +0.0107] | **0.022** |
 | R@1000 | 0.8402 | 0.8460 | +0.0057 | [−0.0014, +0.0128] | 0.12 |
 
-Bold means p < 0.05 without correction. After a Bonferroni correction over the 3 datasets (0.05 / 3 ≈ 0.017), FiQA is no longer significant, while NFCorpus R@1000 still is. With a correction over all 9 tests neither is.
-Overall, we can say the hybrid is _at the level of SPLADE out of domain_, not clearly better.
+*NQ (3,452 queries)*
+
+| Metric | SPLADE | `hybnoW` | Δ | 95% CI | p (perm.) |
+|---|---|---|---|---|---|
+| MRR@10 | 0.4901 | 0.4973 | **+0.0072** | [+0.0025, +0.0118] | **0.0027** |
+| nDCG@10 | 0.5391 | 0.5462 | **+0.0070** | [+0.0033, +0.0110] | **0.0004** |
+| R@1000 | 0.9831 | 0.9815 | −0.0015 | [−0.0034, +0.0002] | 0.11 |
+
+Bold means p < 0.05 without correction. After a Bonferroni correction over the 4 datasets (0.05 / 4 = 0.0125, applied to each metric separately), NQ remains significant on nDCG@10 (p = 0.0004) and MRR@10 (p = 0.0027) and NFCorpus on R@1000 (p = 0.006), while FiQA (p = 0.022 on nDCG@10) is no longer significant. With a correction over all 12 tests (0.05 / 12 ≈ 0.0042) only NQ remains (nDCG@10 and MRR@10).
+Overall, we can say the hybrid is _at least at the level of SPLADE out of domain_ and clearly better on NQ.
 
 **Summary: the best configurations** (% of SPLADE)
 
