@@ -89,7 +89,7 @@ DL20 nDCG@10 0.7203, R@1000 0.8989.
 | validation MRR@10 | +0.031 | +0.028 | +0.0175 | +0.016 | +0.008 | +0.010 |
 | dev MRR@10 | +0.064 | +0.034 | +0.028 | +0.012 | +0.011 | −0.004 |
 | BEIR mean nDCG@10 without NQ (3 datasets) | +0.002 | +0.001 | 0.000 | −0.008 | −0.002 | −0.006 |
-| BEIR mean nDCG@10 with NQ (4 datasets) | +0.023 | +0.017 | 0.002 | −0.004 | +0.001 | −0.005 |
+| BEIR mean nDCG@10 with NQ (4 datasets) | +0.023 | +0.017 | +0.002 | −0.004 | +0.001 | −0.005 |
 
 
 The gain falls with k, stays in domain (except for k = 256, 512 thanks to NQ), and turns negative at 8192, where validation had suggested the opposite.
