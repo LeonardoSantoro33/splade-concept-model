@@ -36,7 +36,7 @@ and permutation test (`src/12_significance.py`).
 
 ## Main results
 
-Percentages are relative to SPLADE (MS MARCO dev MRR@10 = 0.3828, BEIR mean nDCG@10 = 0.4662).
+Percentages are relative to SPLADE (MS MARCO dev MRR@10 = 0.3828, BEIR mean nDCG@10 = 0.4844).
 Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESULTS.md`](docs/RESULTS.md).
 
 **Concept Model alone**
@@ -54,7 +54,7 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 
 | System | MS MARCO dev MRR@10 | BEIR mean nDCG@10 | Index size |
 |---|---|---|---|
-| SPLADE | 0.3828 | 0.4662 | 8.5 GB |
+| SPLADE | 0.3828 | 0.4844 | 8.5 GB |
 | SPLADE + re-trained encoder, no W (`hybnoW`), k = 256, λ = 0.40 | **0.3920** (+0.0092, +2.4%, p <= 0.0001) | 0.4872 (100.6%) | 15.8 GB |
 | SPLADE + e2e Concept Model (`hyb`), k = 256, λ = 0.20 | 0.3901 (+0.0073, p <= 0.0001) | 0.4838 (99.9%) | 15.8 GB |
 | SPLADE + e2e Concept Model (`hyb`), k = 4096, λ = 0.30 | 0.3880 (+0.0052, p <= 0.0001) | 0.4853 (100.2%) | 19.1 GB |
