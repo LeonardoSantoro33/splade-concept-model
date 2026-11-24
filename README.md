@@ -4,7 +4,7 @@
 
 Research code and results for a project carried out at Sapienza University of Rome, using the computing
 facilities of ISTI-CNR. Everything in this repository was run with exact (non-approximate) search over the
-full MS MARCO passage corpus (8.84M passages).
+full MS MARCO passage corpus (8.84M passages) and the full NQ corpus (2.68M passages).
 
 ---
 
@@ -30,7 +30,7 @@ Variants studied, for k = 256, 512, 1024, 2048, 4096, 8192:
 | **Hybrids** | any of the above, score mixed with SPLADE: `(1-λ)·SPLADE·SPLADE + λ·g·g` | |
 
 Evaluation: MS MARCO dev (6,980 queries, MRR@10), TREC DL 2019 / 2020 (nDCG@10), and zero-shot BEIR
-(NFCorpus, SciFact, FiQA; nDCG@10, mean of the three). Hyper-parameters and λ are chosen **only** on 1,000
+(NFCorpus, SciFact, FiQA, NQ; nDCG@10, mean of the four). Hyper-parameters and λ are chosen **only** on 1,000
 held-out training queries, never on dev or BEIR. Differences are tested per query with a paired bootstrap
 and permutation test (`src/12_significance.py`).
 
