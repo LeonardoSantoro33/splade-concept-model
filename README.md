@@ -155,4 +155,4 @@ MIT, see [LICENSE](LICENSE).
 
 ## Author
 
-Leonardo Santoro, Sapienza University of Rome.
+Leonardo Santoro, Sapienza University of Rome. Project carried out under academic supervision, using the computing facilities of ISTI-CNR.
