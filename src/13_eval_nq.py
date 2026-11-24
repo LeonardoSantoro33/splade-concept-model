@@ -39,6 +39,7 @@ Results go to results/summary.csv with query_set = beir_nq. The parsed vectors a
     sbatch --time=01:00:00 -J nq_hyb jobs/gpu.sbatch 13_eval_nq.py --hybrid frozen_k1024_r2_lr3e5:two:0.45
     # fine-tuned side: 1) text (once)  2) one job per checkpoint, with everything it needs
     wget -4 -c -O $WORK_DIR/beir/nq.zip https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/nq.zip
+    #   (if that server does not answer: save corpus.parquet and queries.parquet of HF BeIR/nq in beir/nq/ instead)
     python -u src/13_eval_nq.py --download-only
     sbatch --time=04:00:00 -J nq_e2e_k1024 jobs/gpu.sbatch 13_eval_nq.py \
         --ckpts e2e_k1024_r2_is03125_lr3e5_bb5e6_b32_ep1 --ft-splade e2e_k1024_r2_is03125_lr3e5_bb5e6_b32_ep1 \
@@ -159,6 +160,22 @@ def ensure_text(nq_dir):
     Only these two files are extracted: qrels/ and the professor's files are never touched."""
     need = ["corpus.jsonl", "queries.jsonl"]
     if all((nq_dir / f).exists() for f in need):
+        return
+    # alternative to the BEIR zip: the HF parquet files (BeIR/nq) saved as corpus.parquet / queries.parquet
+    if all((nq_dir / f"{f}.parquet").exists() for f in ("corpus", "queries")):
+        import pyarrow.parquet as pq
+        for f in need:
+            src = nq_dir / (f[:-6] + ".parquet")
+            with timer(f"converting {src.name} -> {f}"):
+                tmp = nq_dir / (f + ".tmp")
+                pf = pq.ParquetFile(src)
+                cols = [c for c in ("_id", "title", "text") if c in pf.schema_arrow.names]
+                with open(tmp, "w", encoding="utf-8") as out:
+                    for batch in pf.iter_batches(batch_size=50_000, columns=cols):
+                        d = batch.to_pydict()
+                        for i in range(len(d["_id"])):
+                            out.write(json.dumps({c: d[c][i] for c in cols}, ensure_ascii=False) + "\n")
+                tmp.rename(nq_dir / f)
         return
     zpath = nq_dir.parent / "nq.zip"
     if not zpath.exists():
