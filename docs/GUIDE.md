@@ -258,7 +258,7 @@ sbatch --time=04:00:00 -J nq_e2e_k1024 jobs/gpu.sbatch src/13_eval_nq.py \
 `--hybrid RUN:VARIANT:LAMBDA` takes the variant (`two` = `hyb`, `now` = `hybnoW`, `single` = `hyb1`, see section 5) and the λ\* found on MS MARCO
 validation for that k (listed in `RESULTS.md`); `--ft-splade` evaluates `ftsplade`. Frozen checkpoints only accept `two`.
 
-Two details of the NQ files we were given:
+Notes on NQ:
 
 - 219 rows of `doc_ids.npy` contain a text fragment instead of an id (`docNNN`); they are not in the qrels, and the fragment is used
   as the passage text. The file also lacks 794 passages of the BEIR corpus (2,680,893 vectors against 2,681,468 passages).
