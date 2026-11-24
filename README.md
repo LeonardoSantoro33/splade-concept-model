@@ -61,16 +61,15 @@ Full tables (DL19/DL20, recall, hybrids, significance tests) are in [`docs/RESUL
 
 ### Take-aways
 
-1. **A linear projection of SPLADE to k dimensions, with the encoder frozen, keeps 73–98% of SPLADE's quality on MS MARCO and 72–99% on BEIR.** The percentage is about the same in and out of domain, so compressing     SPLADE does not make it worse on new datasets.
+1. **A linear projection of SPLADE to k dimensions, with the encoder frozen, keeps 73–98% of SPLADE's quality on MS MARCO and 69–98% on BEIR.** The percentage is about the same in and out of domain from k = 1024 on (within 2 points), while at small k it is slightly lower out of domain (72.9% vs 69.2% at k = 256, 85.1% vs 82.9% at k = 512). So compressing SPLADE does not make it meaningfully worse on new datasets, except at the smallest k.
 2. **k is the main lever. Learning W helps only at small k** (+0.025 MRR@10 at k = 256, +0.013 at 512). From
    k = 1024 on, a random projection is statistically indistinguishable from a learned one.
 3. **Re-training the encoder (e2e) closes most of the gap with SPLADE in domain**: the e2e model reaches 97.5% of SPLADE at k = 1024 (0.3731 vs 0.3828) and ties with it at k = 4096 (0.3829 vs 0.3828), while the frozen model reaches only 90.2% and 97.1% at the same k. For the same quality, e2e needs about 4× less space than frozen (e2e at k = 1024 ≈ frozen at k = 4096, 0.3731 vs 0.3717). The gain comes almost entirely from re-training BERT, not from W: with W fixed at its random initialisation, k = 1024 gives 0.3714, against 0.3731 with trained W.
-4. **The e2e gain is specific to MS MARCO.** Out of domain the e2e model does not meaningfully beat the frozen one at any k (at most +0.002 at k ≤ 512, negative from k = 2048).
+4. **The e2e gain is mostly specific to MS MARCO.** Out of domain, e2e matches the frozen model at k ≥ 1024 (and is slightly below it at 2048 and 8192, −0.004/−0.005). It stays ahead at k = 256 and 512 (+0.023 and +0.017 on the four-dataset mean), but this advantage comes almost entirely from NQ (+0.089 and +0.065); on NFCorpus, SciFact and FiQA the two are equal.
    At k = 8192 it is worse than the frozen model even in domain (0.3722 vs 0.3766), although validation had predicted
-   the opposite. The optimal BERT learning rate keeps falling with k (1e-5 at k = 256, 1e-7 at k = 8192).
-5. **Mixing the re-trained encoder with SPLADE beats SPLADE in-domain and stays at the level of SPLADE out of domain**
-   (best: `hybnoW`, k = 256). The price is a second sparse index (+86% space). Per-dataset BEIR tests against
-   SPLADE show no significant difference after multiple-test correction.
+   the opposite.
+5. **Mixing the re-trained encoder with SPLADE beats SPLADE in-domain and is at least at its level out of domain**
+   (best: `hybnoW`, k = 256; BEIR mean 0.4872 vs 0.4844). Per-dataset tests (nDCG@10, Bonferroni over 4 datasets): on par on NFCorpus, SciFact and FiQA, significantly better on NQ (+0.0070, p = 0.0004). The price is a second sparse index (+86% space).
 6. **No saving in space.** SPLADE stores about 120 non-zeros per document (~1 KB). A dense k-dimensional fp16
    vector is 2k bytes, so no variant is smaller than SPLADE at equal quality.
 
