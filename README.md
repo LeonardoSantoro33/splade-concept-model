@@ -95,6 +95,7 @@ The only script outside `src/` is `plots/concept_model_plots.py`: it writes the 
 │   ├── 10_eval_beir.py                 # zero-shot BEIR (--splade, --ckpts, --ft-splade, --hybrid)
 │   ├── 11_eval_hybrid.py               # hybrids: λ chosen on validation, then dev / DL19 / DL20 (--variant two|single|now)
 │   ├── 12_significance.py              # paired per-query tests: bootstrap CI + t-test + permutation test
+|   ├── 13_eval_nq.py                   # zero-shot NQ (BEIR) on the pre-encoded vectors: --splade, --ckpts, --ft-splade, --hybrid
 │   |
 │   ├── config.py                       # paths (env vars FM_DIR, WORK_DIR)
 │   ├── sparse_io.py  retrieval.py      # CSR / Seismic I/O; exact GPU search
@@ -136,6 +137,8 @@ export WORK_DIR=/path/to/large/scratch/splade_concept   # caches, checkpoints, r
 
 Every long step is a Slurm job. The complete sequence, with the exact commands, is in [`docs/GUIDE.md`](docs/GUIDE.md).
 The figures are produced with `python plots/concept_model_plots.py` (numbers are written inside the script).
+
+NQ uses the pre-encoded SPLADE vectors tuskanny/sparse-nq-splade-cocondenser.
 
 ## Legacy note on LCE
 
